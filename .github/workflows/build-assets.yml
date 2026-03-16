@@ -1,0 +1,48 @@
+name: Build Assets & Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'resources/js/**'
+      - 'resources/css/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.js'
+      - 'tailwind.config.js'
+
+jobs:
+  build-assets:
+    runs-on: ubuntu-latest
+    name: Build Vite Assets
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Commit built assets
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/build
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "ci: rebuild Vite assets [skip ci]"
+            git push
+          fi
