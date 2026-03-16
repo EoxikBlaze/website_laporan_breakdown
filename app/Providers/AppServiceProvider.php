@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,6 +15,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
+
+        // Force HTTPS in production (Railway terminates SSL at proxy level)
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
 
         // Full admin access (for menus, CRUD on master data)
         Gate::define('admin', function (User $user) {
