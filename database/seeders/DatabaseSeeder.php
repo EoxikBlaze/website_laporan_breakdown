@@ -24,6 +24,16 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Backup Super Admin
+        User::updateOrCreate(
+            ['email' => 'pama@gmail.com'],
+            [
+                'name' => 'PAMA Admin',
+                'password' => Hash::make('pama1234'),
+                'role' => 'super_admin',
+            ]
+        );
+
         // Create Operator
         User::updateOrCreate(
             ['email' => 'operator@pama.com'],
