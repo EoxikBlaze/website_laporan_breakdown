@@ -25,7 +25,6 @@
     @stack('styles')
     
     <!-- Vite Scripts -->
-    @viteReactRefresh
     @vite(['resources/js/app.tsx'])
 </head>
 @php
