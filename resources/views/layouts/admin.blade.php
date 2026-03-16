@@ -4,101 +4,109 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'General Service PT. PAMA SITE . ARIA')</title>
+    <title>@yield('title', 'Dashboard') | GS PT. PAMA SITE ARIA</title>
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome -->
+    <!-- Font Awesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- AdminLTE CSS (CDN) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-
     <style>
-        body {
-            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 
     @stack('styles')
-    
-    <!-- Vite Scripts -->
+
+    <!-- Vite -->
     @vite(['resources/js/app.tsx'])
 </head>
+
 @php
     $sidebarProps = [
         'user' => [
-            'name' => Auth::user()->name ?? 'User',
+            'name'  => Auth::user()->name  ?? 'User',
             'email' => Auth::user()->email ?? '',
         ],
         'routes' => [
-            'dashboard' => route('dashboard'),
-            'units' => route('master_units.index'),
-            'vendors' => route('vendors.index'),
+            'dashboard'     => route('dashboard'),
+            'units'         => route('master_units.index'),
+            'vendors'       => route('vendors.index'),
             'breakdownCreate' => route('breakdown_logs.create'),
-            'breakdownIndex' => route('breakdown_logs.index'),
-            'users' => route('users.index'),
-            'logout' => route('logout'),
+            'breakdownIndex'  => route('breakdown_logs.index'),
+            'users'         => route('users.index'),
+            'logout'        => route('logout'),
         ],
-        'csrfToken' => csrf_token(),
-        'canAdmin' => Gate::check('admin'),
+        'csrfToken'    => csrf_token(),
+        'canAdmin'     => Gate::check('admin'),
         'currentRoute' => request()->url(),
     ];
 @endphp
 
-<body class="bg-neutral-50 font-sans">
+<body class="bg-neutral-50 antialiased">
     <div class="flex flex-col md:flex-row h-screen w-full overflow-hidden">
-        {{-- REACT SIDEBAR ISLAND --}}
-        <div 
-            data-react-component="AppSidebar" 
+
+        {{-- ── React Sidebar Island ─── --}}
+        <div
+            data-react-component="AppSidebar"
             data-props='@json($sidebarProps)'
-            class="h-auto md:h-full"
+            class="shrink-0"
         ></div>
 
-        {{-- MAIN CONTENT --}}
-        <div class="flex flex-col flex-1 h-full overflow-y-auto bg-neutral-100/50">
-            <header class="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
+        {{-- ── Main Content ───────── --}}
+        <div class="flex flex-col flex-1 h-full overflow-y-auto bg-neutral-100/60 min-w-0">
+
+            {{-- Top Bar --}}
+            <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-neutral-200/80 px-5 md:px-8 py-4 flex items-center justify-between shadow-sm">
                 <div>
-                    <h1 class="text-xl font-bold text-neutral-800">
+                    <h1 class="text-lg font-bold text-neutral-800 leading-tight">
                         @yield('page-title', 'Dashboard')
                     </h1>
+                    <p class="text-xs text-neutral-400 mt-0.5 hidden md:block">GS Management System · PT. PAMA SITE ARIA</p>
                 </div>
-                <div class="hidden md:flex items-center gap-4">
-                    <span class="text-sm text-neutral-500 font-medium">GS Management System v1.0</span>
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex items-center gap-2 bg-neutral-100 rounded-xl px-3 py-2">
+                        <div class="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                            {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-neutral-700 leading-none">{{ Auth::user()->name ?? 'User' }}</p>
+                            <p class="text-[10px] text-neutral-400 mt-0.5">{{ Auth::user()->role === 'super_admin' ? 'Super Admin' : 'Operator' }}</p>
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            <main class="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8">
+            {{-- Alerts --}}
+            <div class="px-5 md:px-8 pt-5">
                 @if(session('success'))
-                    <div class="mb-6 p-4 rounded-xl bg-emerald-100 border border-emerald-200 text-emerald-800 flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
-                        <i class="fas fa-check-circle h-5 w-5"></i>
-                        <span class="font-medium text-sm">{{ session('success') }}</span>
-                    </div>
+                <div class="mb-4 flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm shadow-xs">
+                    <i class="fas fa-check-circle text-emerald-500"></i>
+                    <span class="font-medium">{{ session('success') }}</span>
+                </div>
                 @endif
-
                 @if(session('error'))
-                    <div class="mb-6 p-4 rounded-xl bg-rose-100 border border-rose-200 text-rose-800 flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
-                        <i class="fas fa-exclamation-circle h-5 w-5"></i>
-                        <span class="font-medium text-sm">{{ session('error') }}</span>
-                    </div>
+                <div class="mb-4 flex items-center gap-3 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm shadow-xs">
+                    <i class="fas fa-exclamation-circle text-rose-500"></i>
+                    <span class="font-medium">{{ session('error') }}</span>
+                </div>
                 @endif
+            </div>
 
+            {{-- Page Content --}}
+            <main class="flex-1 w-full px-5 md:px-8 pb-8">
                 @yield('content')
             </main>
 
-            <footer class="p-6 text-center text-sm text-neutral-400 border-t border-neutral-200">
-                &copy; {{ date('Y') }} <span class="font-bold text-neutral-600">PT. Pamapersada Nusantara - GS ARIA</span>. All rights reserved.
+            {{-- Footer --}}
+            <footer class="px-8 py-4 text-center text-xs text-neutral-400 border-t border-neutral-200 bg-white">
+                &copy; {{ date('Y') }} <span class="font-semibold text-neutral-600">PT. Pamapersada Nusantara — GS ARIA</span>. All rights reserved.
             </footer>
         </div>
     </div>
 
-<!-- Scripts (CDN) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-
-@stack('scripts')
+    @stack('scripts')
 </body>
 </html>
