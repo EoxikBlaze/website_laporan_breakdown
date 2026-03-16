@@ -1,0 +1,11 @@
+{
+  "resources/js/app.tsx": {
+    "file": "assets/app-LykmdcTh.js",
+    "name": "app",
+    "src": "resources/js/app.tsx",
+    "isEntry": true,
+    "css": [
+      "assets/app-Dmp5l4U-.css"
+    ]
+  }
+}
