@@ -1,22 +1,23 @@
 [phases.setup]
 nixPkgs = [
-  "php84",
-  "php84Extensions.gd",
-  "php84Extensions.pdo",
-  "php84Extensions.pdo_sqlite",
-  "php84Extensions.pdo_mysql",
-  "php84Extensions.mbstring",
-  "php84Extensions.tokenizer",
-  "php84Extensions.xml",
-  "php84Extensions.zip",
-  "php84Extensions.bcmath",
-  "php84Extensions.curl",
-  "php84Extensions.intl",
-  "php84Extensions.fileinfo",
-  "php84Extensions.openssl",
-  "php84Extensions.sodium",
-  "php84Extensions.ctype",
-  "php84Extensions.dom",
+  "nodejs_20",
+  "php83",
+  "php83Extensions.gd",
+  "php83Extensions.pdo",
+  "php83Extensions.pdo_sqlite",
+  "php83Extensions.pdo_mysql",
+  "php83Extensions.mbstring",
+  "php83Extensions.tokenizer",
+  "php83Extensions.xml",
+  "php83Extensions.zip",
+  "php83Extensions.bcmath",
+  "php83Extensions.curl",
+  "php83Extensions.intl",
+  "php83Extensions.fileinfo",
+  "php83Extensions.openssl",
+  "php83Extensions.sodium",
+  "php83Extensions.ctype",
+  "php83Extensions.dom",
   "composer"
 ]
 
@@ -30,9 +31,9 @@ cmds = [
   "npm ci",
   "npm run build",
   "composer run-script post-autoload-dump || true",
-  "mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data storage/logs",
+  "mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data storage/logs bootstrap/cache",
   "touch database/database.sqlite"
 ]
 
 [start]
-cmd = "sh start.sh"
+cmd = "sh /app/start.sh"
