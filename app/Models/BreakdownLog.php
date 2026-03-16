@@ -1,0 +1,147 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Carbon\Carbon;
+
+class BreakdownLog extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'unit_id',
+        'spare_unit_id',
+        'user_id',
+        'vendor_id',
+        'waktu_awal_bd',
+        'waktu_akhir_bd',
+        'waktu_spare_datang',
+        'status',
+        'keterangan',
+    ];
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (BreakdownLog $log) {
+            // 1. Auto-assign vendor from unit if not manually set or if unit changed
+            if ($log->unit_id) {
+                $unit = MasterUnit::find($log->unit_id);
+                if ($unit && $unit->vendor_id) {
+                    $log->vendor_id = $unit->vendor_id;
+                }
+            }
+
+            // 2. Auto-close if waktu_akhir_bd is filled
+            if ($log->waktu_akhir_bd) {
+                $log->status = 'Closed';
+            }
+        });
+    }
+
+    /**
+     * Get the vendor associated with this breakdown.
+     */
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
+    }
+
+    /**
+     * Get the unit that is broken down.
+     */
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(MasterUnit::class, 'unit_id');
+    }
+
+    /**
+     * Get the spare unit assigned to this breakdown.
+     */
+    public function spareUnit(): BelongsTo
+    {
+        return $this->belongsTo(MasterUnit::class, 'spare_unit_id');
+    }
+
+    /**
+     * Get the user who reported the breakdown.
+     */
+    public function reporter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Accessor to calculate loss_time (diff between waktu_awal_bd and waktu_akhir_bd).
+     */
+    protected function lossTime(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (!$this->waktu_awal_bd || !$this->waktu_akhir_bd) {
+                    return null;
+                }
+
+                $awal = Carbon::parse($this->waktu_awal_bd);
+                $akhir = Carbon::parse($this->waktu_akhir_bd);
+
+                return $awal->diffForHumans($akhir, [
+                    'syntax' => Carbon::DIFF_ABSOLUTE,
+                    'parts' => 3,
+                ]);
+            }
+        );
+    }
+
+    /**
+     * Accessor to calculate lama_bd_tanpa_spare (diff between waktu_awal_bd and waktu_spare_datang).
+     */
+    protected function lamaBdTanpaSpare(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (!$this->waktu_awal_bd || !$this->waktu_spare_datang) {
+                    return null;
+                }
+
+                $awal = Carbon::parse($this->waktu_awal_bd);
+                $spare = Carbon::parse($this->waktu_spare_datang);
+
+                return $awal->diffForHumans($spare, [
+                    'syntax' => Carbon::DIFF_ABSOLUTE,
+                    'parts' => 3,
+                ]);
+            }
+        );
+    }
+
+    /**
+     * Accessor to calculate loss_time as a percentage of 24 hours (1 day).
+     */
+    protected function lossTimePercentage(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (!$this->waktu_awal_bd || !$this->waktu_akhir_bd) {
+                    return null;
+                }
+
+                $awal = Carbon::parse($this->waktu_awal_bd);
+                $akhir = Carbon::parse($this->waktu_akhir_bd);
+
+                $totalSeconds = $awal->diffInSeconds($akhir);
+                $secondsInDay = 86400;
+
+                $percentage = ($totalSeconds / $secondsInDay) * 100;
+
+                return number_format($percentage, 2) . '%';
+            }
+        );
+    }
+}
