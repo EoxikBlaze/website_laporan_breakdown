@@ -14,8 +14,11 @@ class DashboardController extends Controller
         $today = now()->startOfDay();
         
         // Calculate Loss Time Total Harian (Today's reports)
-        $logsToday = BreakdownLog::where('waktu_awal_bd', '>=', $today)
-            ->orWhere('waktu_akhir_bd', '>=', $today)
+        // Use nested where to ensure global scope is applied safely with OR
+        $logsToday = BreakdownLog::where(function($query) use ($today) {
+                $query->where('waktu_awal_bd', '>=', $today)
+                      ->orWhere('waktu_akhir_bd', '>=', $today);
+            })
             ->get();
 
         $totalSeconds = 0;

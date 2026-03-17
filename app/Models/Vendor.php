@@ -15,6 +15,15 @@ class Vendor extends Model
         'kontak',
         'keterangan',
     ];
+    
+    protected static function booted(): void
+    {
+        static::addGlobalScope('vendor', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            if (auth()->check() && !auth()->user()->isSuperAdmin() && auth()->user()->vendor_id) {
+                $builder->where('id', auth()->user()->vendor_id);
+            }
+        });
+    }
 
     /**
      * Get the units associated with this vendor.

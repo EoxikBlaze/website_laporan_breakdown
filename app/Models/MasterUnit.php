@@ -23,7 +23,7 @@ class MasterUnit extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('vendor', function (\Illuminate\Database\Eloquent\Builder $builder) {
-            if (auth()->check() && auth()->user()->isOperator() && auth()->user()->vendor_id) {
+            if (auth()->check() && !auth()->user()->isSuperAdmin() && auth()->user()->vendor_id) {
                 $builder->where('vendor_id', auth()->user()->vendor_id);
             }
         });
