@@ -59,21 +59,21 @@
         <div class="flex flex-col flex-1 h-full overflow-y-auto bg-neutral-100/60 min-w-0">
 
             {{-- Top Bar --}}
-            <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-neutral-200/80 px-5 md:px-8 py-4 flex items-center justify-between shadow-sm">
+            <header class="sticky top-0 z-30 bg-blue-700 backdrop-blur-md border-b border-blue-800 px-5 md:px-8 py-4 flex items-center justify-between shadow-md">
                 <div>
-                    <h1 class="text-lg font-bold text-neutral-800 leading-tight">
+                    <h1 class="text-lg font-bold text-white leading-tight">
                         @yield('page-title', 'Dashboard')
                     </h1>
-                    <p class="text-xs text-neutral-400 mt-0.5 hidden md:block">GS Management System · PT. PAMA SITE ARIA</p>
+                    <p class="text-xs text-blue-100 mt-0.5 hidden md:block">GS Management System · PT. PAMA SITE ARIA</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <div class="hidden md:flex items-center gap-2 bg-neutral-100 rounded-xl px-3 py-2">
-                        <div class="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                    <div class="hidden md:flex items-center gap-2 bg-white/10 rounded-xl px-3 py-2 border border-white/20">
+                        <div class="h-7 w-7 rounded-full bg-white flex items-center justify-center text-blue-700 font-bold text-xs shadow-sm">
                             {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                         </div>
                         <div>
-                            <p class="text-xs font-semibold text-neutral-700 leading-none">{{ Auth::user()->name ?? 'User' }}</p>
-                            <p class="text-[10px] text-neutral-400 mt-0.5">{{ Auth::user()->role === 'super_admin' ? 'Super Admin' : 'Operator' }}</p>
+                            <p class="text-xs font-semibold text-white leading-none">{{ Auth::user()->name ?? 'User' }}</p>
+                            <p class="text-[10px] text-blue-100 mt-0.5">{{ Auth::user()->role === 'super_admin' ? 'Super Admin' : 'Operator' }}</p>
                         </div>
                     </div>
                 </div>

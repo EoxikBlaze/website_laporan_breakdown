@@ -225,7 +225,7 @@ export const Logo = () => {
 export const LogoIcon = () => {
   return (
     <div className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20">
-      <div className="h-6 w-7 bg-primary rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0 flex items-center justify-center text-white">
+      <div className="h-6 w-7 bg-blue-600 rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0 flex items-center justify-center text-white">
         <Building2 className="h-4 w-4" />
       </div>
     </div>

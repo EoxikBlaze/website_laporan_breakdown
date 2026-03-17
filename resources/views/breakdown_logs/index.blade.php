@@ -6,19 +6,27 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        <div class="card shadow-sm border-0">
-            <div class="card-header" style="background: linear-gradient(135deg,#1a1a2e,#0f3460); color:#fff;">
-                <h3 class="card-title mt-1"><i class="fas fa-history mr-2"></i> Riwayat Breakdown</h3>
-                <div class="card-tools">
-                    <a href="{{ route('breakdown_logs.export') }}" class="btn btn-sm btn-outline-success mr-2 shadow-sm" style="border-width: 2px;">
-                        <i class="fas fa-file-excel mr-1"></i> Export Excel
+        <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-between border-b border-blue-700">
+                <div>
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-history text-blue-200"></i>
+                        Riwayat Breakdown
+                    </h3>
+                    <p class="text-[10px] text-blue-100 mt-0.5">Daftar laporan breakdown unit aktif dan riwayat</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('breakdown_logs.export') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/20 text-white border border-blue-400/30 text-xs font-bold rounded-lg hover:bg-blue-500/40 transition-colors shadow-sm">
+                        <i class="fas fa-file-excel"></i>
+                        Export Excel
                     </a>
-                    <a href="{{ route('breakdown_logs.create') }}" class="btn btn-sm btn-success shadow-sm">
-                        <i class="fas fa-plus mr-1"></i> Input Laporan
+                    <a href="{{ route('breakdown_logs.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
+                        <i class="fas fa-plus"></i>
+                        Input Laporan
                     </a>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="p-6">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="icon fas fa-check"></i> {{ session('success') }}

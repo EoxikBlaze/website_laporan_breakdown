@@ -6,16 +6,23 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        <div class="card shadow-sm border-0">
-            <div class="card-header" style="background: linear-gradient(135deg,#1a1a2e,#0f3460); color:#fff;">
-                <h3 class="card-title mt-1"><i class="fas fa-building mr-2"></i> Data Vendor</h3>
-                <div class="card-tools">
-                    <a href="{{ route('vendors.create') }}" class="btn btn-sm btn-success shadow-sm">
-                        <i class="fas fa-plus mr-1"></i> Tambah Vendor
+        <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-between border-b border-blue-700">
+                <div>
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-building text-blue-200"></i>
+                        Data Vendor
+                    </h3>
+                    <p class="text-[10px] text-blue-100 mt-0.5">Kelola informasi mitra/vendor</p>
+                </div>
+                <div>
+                    <a href="{{ route('vendors.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
+                        <i class="fas fa-plus"></i>
+                        Tambah Vendor
                     </a>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="p-6">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="icon fas fa-check"></i> {{ session('success') }}

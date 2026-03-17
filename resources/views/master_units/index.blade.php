@@ -6,16 +6,23 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        <div class="card shadow-sm border-0">
-            <div class="card-header" style="background: linear-gradient(135deg,#1a1a2e,#0f3460); color:#fff;">
-                <h3 class="card-title mt-1"><i class="fas fa-truck mr-2"></i> Data Unit</h3>
-                <div class="card-tools">
-                    <a href="{{ route('master_units.create') }}" class="btn btn-sm btn-success shadow-sm">
-                        <i class="fas fa-plus mr-1"></i> Tambah Unit
+        <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-between border-b border-blue-700">
+                <div>
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-truck text-blue-200"></i>
+                        Data Unit
+                    </h3>
+                    <p class="text-[10px] text-blue-100 mt-0.5">Kelola informasi armada unit</p>
+                </div>
+                <div>
+                    <a href="{{ route('master_units.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
+                        <i class="fas fa-plus"></i>
+                        Tambah Unit
                     </a>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="p-6">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="icon fas fa-check"></i> {{ session('success') }}

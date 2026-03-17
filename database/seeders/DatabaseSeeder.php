@@ -14,32 +14,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Super Admin
+        // 1. Admin Super Admin
         User::updateOrCreate(
-            ['email' => 'admin@pama.com'],
+            ['email' => 'admin@gsportalaria.up.railway.app'],
             [
-                'name' => 'Super Admin',
-                'password' => Hash::make('password'),
+                'name' => 'Admin Utama',
+                'password' => Hash::make('persada123789'),
                 'role' => 'super_admin',
             ]
         );
 
-        // Backup Super Admin
+        // 2. PAMA Super Admin
         User::updateOrCreate(
-            ['email' => 'pama@gmail.com'],
+            ['email' => 'pama@gsportalaria.up.railway.app'],
             [
                 'name' => 'PAMA Admin',
-                'password' => Hash::make('pama1234'),
+                'password' => Hash::make('persada123789'),
                 'role' => 'super_admin',
             ]
         );
 
-        // Create Operator
+        // 3. Operator
         User::updateOrCreate(
-            ['email' => 'operator@pama.com'],
+            ['email' => 'operator@gsportalaria.up.railway.app'],
             [
-                'name' => 'Petugas Operator',
-                'password' => Hash::make('password'),
+                'name' => 'Operator Lapangan',
+                'password' => Hash::make('tiadahari489'),
                 'role' => 'operator',
             ]
         );

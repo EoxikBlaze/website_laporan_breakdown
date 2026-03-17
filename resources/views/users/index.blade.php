@@ -4,21 +4,23 @@
 
 @section('content')
 <div class="space-y-6">
-    {{-- Header --}}
-    <div class="flex items-center justify-between">
-        <div>
-            <h2 class="text-2xl font-bold text-neutral-800">Daftar User</h2>
-            <p class="text-sm text-neutral-500 mt-1">Kelola akun pengguna sistem</p>
+    <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+        <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-between border-b border-blue-700">
+            <div>
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-users text-blue-200"></i>
+                    Manajemen User
+                </h3>
+                <p class="text-[10px] text-blue-100 mt-0.5">Kelola akun pengguna sistem</p>
+            </div>
+            <div>
+                <a href="{{ route('users.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
+                    <i class="fas fa-plus"></i>
+                    Tambah User
+                </a>
+            </div>
         </div>
-        <a href="{{ route('users.create') }}" 
-           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white font-medium text-sm shadow-sm hover:bg-primary/90 transition-colors">
-            <i class="fas fa-plus text-xs"></i> Tambah User
-        </a>
-    </div>
-
-    {{-- Table --}}
-    <div class="rounded-xl border border-neutral-200 bg-white shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto p-4">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-neutral-100 bg-neutral-50">

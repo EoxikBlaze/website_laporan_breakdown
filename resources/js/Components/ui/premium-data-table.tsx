@@ -123,12 +123,12 @@ export const PremiumDataTable = ({
       <div className="rounded-xl border bg-card/30 backdrop-blur-sm text-card-foreground shadow-xl border-border/40 overflow-hidden">
         <div className="relative w-full overflow-auto">
           <Table>
-            <TableHeader className="bg-muted/40 sticky top-0 z-10 backdrop-blur-md">
+            <TableHeader className="bg-blue-50/50 sticky top-0 z-10 backdrop-blur-md border-b-2 border-primary/10">
               <TableRow className="hover:bg-transparent border-border/40">
                 {columns
                   .filter((col) => visibleColumns.has(col.key))
                   .map((col) => (
-                    <TableHead key={col.key} className="h-12 px-4 py-3 font-semibold text-foreground/70 uppercase text-[11px] tracking-wider">
+                    <TableHead key={col.key} className="h-12 px-4 py-3 font-bold text-primary uppercase text-[10px] tracking-wider">
                       {col.label}
                     </TableHead>
                   ))}
