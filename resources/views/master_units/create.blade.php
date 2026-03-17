@@ -49,6 +49,7 @@
                     @error('status_operasional') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
 
+                @if(auth()->user()->isSuperAdmin())
                 <div class="space-y-2">
                     <label for="vendor_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Vendor (Opsional)</label>
                     <select name="vendor_id" id="vendor_id" class="select2 w-full text-sm">
@@ -61,6 +62,7 @@
                     </select>
                     @error('vendor_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
+                @endif
             </div>
 
             <div class="flex items-center gap-3 pt-4">

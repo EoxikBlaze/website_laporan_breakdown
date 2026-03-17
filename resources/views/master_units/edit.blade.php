@@ -50,18 +50,20 @@
                     @error('status_operasional') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
 
+                @if(auth()->user()->isSuperAdmin())
                 <div class="space-y-2">
                     <label for="vendor_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Vendor (Opsional)</label>
                     <select name="vendor_id" id="vendor_id" class="select2 w-full text-sm">
                         <option value="">-- Tanpa Vendor --</option>
                         @foreach($vendors as $vendor)
-                            <option value="{{ $vendor->id }}" {{ old('vendor_id', $masterUnit->vendor_id) == $vendor->id ? 'selected' : '' }}>
+                            <option value="{{ $vendor->id }}" {{ (old('vendor_id', $masterUnit->vendor_id) == $vendor->id) ? 'selected' : '' }}>
                                 {{ $vendor->nama_vendor }}
                             </option>
                         @endforeach
                     </select>
                     @error('vendor_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
+                @endif
             </div>
 
             @if($masterUnit->status_operasional !== 'Ready')

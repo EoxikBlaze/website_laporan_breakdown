@@ -43,6 +43,10 @@ class MasterUnitController extends Controller
             'vendor_id' => ['nullable', 'exists:vendors,id'],
         ]);
 
+        if (!auth()->user()->isSuperAdmin()) {
+            $validated['vendor_id'] = auth()->user()->vendor_id;
+        }
+
         MasterUnit::create($validated);
 
         return redirect()->route('master_units.index')
@@ -82,6 +86,10 @@ class MasterUnitController extends Controller
             'status_operasional' => ['required', 'in:Ready,In Use,Breakdown'],
             'vendor_id' => ['nullable', 'exists:vendors,id'],
         ]);
+
+        if (!auth()->user()->isSuperAdmin()) {
+            $validated['vendor_id'] = auth()->user()->vendor_id;
+        }
 
         $masterUnit->update($validated);
 
