@@ -37,15 +37,18 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                     <Button
                         variant={"outline"}
                         className={cn(
-                            "w-full justify-start text-left font-normal h-10 border-[#d1d5db] rounded-lg bg-white hover:border-primary/50 transition-all",
+                            "w-full justify-start text-left font-normal h-10 border-[#d1d5db] rounded-lg bg-white hover:border-primary/50 transition-all focus:ring-2 focus:ring-primary/20",
                             !date && "text-muted-foreground"
                         )}
                     >
-                        <span className="flex-1 font-semibold">{displayValue}</span>
+                        <span className="flex-1 font-semibold text-sm">{displayValue}</span>
                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-none shadow-2xl rounded-2xl overflow-hidden bg-white" align="start">
+                <PopoverContent 
+                    className="w-[95vw] md:w-auto p-0 border-none shadow-2xl rounded-2xl overflow-hidden bg-white max-h-[85vh] overflow-y-auto" 
+                    align="start"
+                >
                     <div className="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-gray-100">
                         {/* Calendar Part */}
                         <div className="p-4">
