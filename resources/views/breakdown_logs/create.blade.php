@@ -89,7 +89,7 @@
                                 Waktu Awal Breakdown <span class="text-rose-500">*</span>
                             </label>
                             <div data-react-component="IosDateTimePicker" 
-                                 data-props="{{ json_encode(['name' => 'waktu_awal_bd', 'initialValue' => old('waktu_awal_bd', date('Y-m-d\TH:i'))]) }}">
+                                 data-props="{{ json_encode(['name' => 'waktu_awal_bd', 'id' => 'waktu_awal_bd', 'initialValue' => old('waktu_awal_bd', date('Y-m-d\TH:i'))]) }}">
                             </div>
                             @error('waktu_awal_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -99,7 +99,7 @@
                                 Waktu Spare Datang
                             </label>
                             <div data-react-component="IosDateTimePicker" 
-                                 data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'initialValue' => old('waktu_spare_datang')]) }}">
+                                 data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'id' => 'waktu_spare_datang', 'initialValue' => old('waktu_spare_datang')]) }}">
                             </div>
                             @error('waktu_spare_datang') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -109,7 +109,7 @@
                                 Waktu Selesai Breakdown (Closed)
                             </label>
                             <div data-react-component="IosDateTimePicker" 
-                                 data-props="{{ json_encode(['name' => 'waktu_akhir_bd', 'initialValue' => old('waktu_akhir_bd')]) }}">
+                                 data-props="{{ json_encode(['name' => 'waktu_akhir_bd', 'id' => 'waktu_akhir_bd', 'initialValue' => old('waktu_akhir_bd')]) }}">
                             </div>
                             @error('waktu_akhir_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>

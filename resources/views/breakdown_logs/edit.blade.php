@@ -91,7 +91,7 @@
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Mulai Breakdown <span class="text-rose-500">*</span></label>
                             <div data-react-component="IosDateTimePicker" 
-                                 data-props="{{ json_encode(['name' => 'waktu_awal_bd', 'initialValue' => \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('Y-m-d\TH:i')]) }}">
+                                 data-props="{{ json_encode(['name' => 'waktu_awal_bd', 'id' => 'waktu_awal_bd', 'initialValue' => \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('Y-m-d\TH:i')]) }}">
                             </div>
                             @error('waktu_awal_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -99,7 +99,7 @@
                         <div id="spare-time-container" class="space-y-2" style="display: none;">
                             <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Spare Unit Datang</label>
                             <div data-react-component="IosDateTimePicker" 
-                                 data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'initialValue' => $breakdownLog->waktu_spare_datang ? \Carbon\Carbon::parse($breakdownLog->waktu_spare_datang)->format('Y-m-d\TH:i') : null]) }}">
+                                 data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'id' => 'waktu_spare_datang', 'initialValue' => $breakdownLog->waktu_spare_datang ? \Carbon\Carbon::parse($breakdownLog->waktu_spare_datang)->format('Y-m-d\TH:i') : null]) }}">
                             </div>
                             @error('waktu_spare_datang') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -107,7 +107,7 @@
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Selesai Breakdown (Closed)</label>
                             <div data-react-component="IosDateTimePicker" 
-                                 data-props="{{ json_encode(['name' => 'waktu_akhir_bd', 'initialValue' => $breakdownLog->waktu_akhir_bd ? \Carbon\Carbon::parse($breakdownLog->waktu_akhir_bd)->format('Y-m-d\TH:i') : null]) }}">
+                                 data-props="{{ json_encode(['name' => 'waktu_akhir_bd', 'id' => 'waktu_akhir_bd', 'initialValue' => $breakdownLog->waktu_akhir_bd ? \Carbon\Carbon::parse($breakdownLog->waktu_akhir_bd)->format('Y-m-d\TH:i') : null]) }}">
                             </div>
                             @error('waktu_akhir_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>

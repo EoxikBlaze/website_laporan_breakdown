@@ -1,6 +1,6 @@
 import * as React from "react";
 import { format } from "date-fns";
-import { id } from "date-fns/locale";
+import { id as idLocale } from "date-fns/locale";
 import { Calendar } from "@/Components/ui/calendar";
 import { TimePicker } from "@/Components/ui/time-picker";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
@@ -16,7 +16,7 @@ interface IosDateTimePickerProps {
 
 import { AnimatePresence, motion } from "framer-motion";
 
-export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePickerProps) {
+export function IosDateTimePicker({ name, initialValue, label, id: idProp }: IosDateTimePickerProps & { id?: string }) {
     const [date, setDate] = React.useState<Date | undefined>(() => {
         if (initialValue) return new Date(initialValue);
         const d = new Date();
@@ -25,6 +25,9 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
     });
     const [isOpen, setIsOpen] = React.useState(false);
     const [isMobile, setIsMobile] = React.useState(false);
+
+    // Use name as fallback for id if idProp is not provided
+    const id = idProp || name;
 
     React.useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 640);
@@ -51,7 +54,7 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                     <div className="flex flex-col">
                         <p className="text-[10px] uppercase tracking-[0.25em] font-black opacity-60 mb-1">Setel Laporan</p>
                         <span className="text-base font-bold">
-                            {date ? format(date, "dd MMMM yyyy", { locale: id }) : "Pilih Tanggal"}
+                            {date ? format(date, "dd MMMM yyyy", { locale: idLocale }) : "Pilih Tanggal"}
                         </span>
                     </div>
                     <div className="px-5 py-2.5 bg-white/10 rounded-2xl text-xl font-black backdrop-blur-2xl border border-white/20 shadow-inner">
@@ -81,7 +84,7 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                                 newDate.setMinutes(prev.getMinutes());
                                 return newDate;
                             })}
-                            locale={id}
+                            locale={idLocale}
                             className="p-0"
                         />
                     </div>
@@ -127,6 +130,7 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
             <Popover open={!isMobile && isOpen} onOpenChange={setIsOpen}>
                 <PopoverTrigger asChild>
                     <Button
+                        id={id}
                         variant={"outline"}
                         type="button"
                         onClick={() => isMobile && setIsOpen(true)}
