@@ -28,13 +28,13 @@ class VendorSeeder extends Seeder
         ];
 
         foreach ($vendors as $v) {
-            $vendor = \App\Models\Vendor::firstOrCreate(
+            $vendor = \App\Models\Vendor::updateOrCreate(
                 ['nama_vendor' => $v['nama_vendor']], 
                 ['kontak' => $v['kontak'], 'keterangan' => $v['keterangan']]
             );
 
             // Auto-create operator for each vendor if not exists
-            \App\Models\User::firstOrCreate(
+            \App\Models\User::updateOrCreate(
                 ['email' => $v['email']],
                 [
                     'name' => 'Operator ' . $v['nama_vendor'],
