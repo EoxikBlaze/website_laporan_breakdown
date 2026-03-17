@@ -157,7 +157,16 @@ export const MobileSidebar = ({
               >
                 <X className="h-6 w-6" />
               </div>
-              <div className="flex flex-col flex-1 pt-10 overflow-y-auto">
+              <div className="flex flex-col flex-1 pt-2 overflow-y-auto">
+                <div className="flex items-center gap-3 px-2 mb-8">
+                  <div className="h-9 w-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                    <Building2 className="h-5 w-5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-black text-neutral-900 text-sm tracking-tight leading-none">GS MANAGEMENT</span>
+                    <span className="text-primary text-[10px] font-bold tracking-tighter uppercase mt-0.5">PT. PAMA SITE . ARIA</span>
+                  </div>
+                </div>
                 {children}
               </div>
             </motion.div>
