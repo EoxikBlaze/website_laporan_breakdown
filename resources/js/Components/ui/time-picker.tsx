@@ -45,52 +45,61 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
     };
 
     return (
-        <div className="flex bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-            {/* Hours Column */}
-            <div className="flex flex-col border-r border-gray-100">
-                <div className="px-3 py-1 bg-gray-50 text-[10px] uppercase font-bold text-muted-foreground border-b border-gray-100 text-center">
-                    Jam
+        <div className="w-full bg-white rounded-2xl border border-neutral-100 overflow-hidden shadow-sm p-4">
+            <div className="flex gap-8 justify-center">
+                {/* Hours Column */}
+                <div className="flex flex-col items-center gap-3">
+                    <span className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest">Jam</span>
+                    <div className="flex flex-col h-[220px] overflow-y-auto p-2 w-14 no-scrollbar scroll-smooth space-y-2 snap-y snap-mandatory">
+                        {hours.map((h) => (
+                            <button
+                                key={h}
+                                ref={(el) => (hourRefs.current[h] = el)}
+                                onClick={() => handleHourChange(h)}
+                                className={cn(
+                                    "h-10 w-10 flex-shrink-0 flex items-center justify-center text-sm font-bold rounded-xl transition-all duration-200 snap-center",
+                                    selectedHour === h 
+                                        ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-110" 
+                                        : "text-neutral-400 hover:bg-blue-50 hover:text-blue-600"
+                                )}
+                            >
+                                {h.toString().padStart(2, "0")}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-                <div className="flex flex-col h-[200px] overflow-y-auto p-1 w-16 scroll-smooth">
-                    {hours.map((h) => (
-                        <Button
-                            key={h}
-                            ref={(el) => (hourRefs.current[h] = el)}
-                            variant={selectedHour === h ? "default" : "ghost"}
-                            className={cn(
-                                "h-8 w-8 p-0 flex-shrink-0 text-sm font-medium rounded-full mb-2 mx-auto transition-all duration-200",
-                                selectedHour === h ? "shadow-lg shadow-primary/40 bg-primary text-white scale-110" : "hover:bg-primary/10 hover:text-primary"
-                            )}
-                            onClick={() => handleHourChange(h)}
-                        >
-                            {h.toString().padStart(2, "0")}
-                        </Button>
-                    ))}
-                </div>
-            </div>
 
-            {/* Minutes Column */}
-            <div className="flex flex-col">
-                <div className="px-3 py-1 bg-gray-50 text-[10px] uppercase font-bold text-muted-foreground border-b border-gray-100 text-center">
-                    Menit
+                <div className="flex flex-col justify-center pt-6">
+                    <span className="text-xl font-bold text-neutral-300 animate-pulse">:</span>
                 </div>
-                <div className="flex flex-col h-[200px] overflow-y-auto p-1 w-16 scroll-smooth">
-                    {minutes.map((m) => (
-                        <Button
-                            key={m}
-                            ref={(el) => (minuteRefs.current[m] = el)}
-                            variant={selectedMinute === m ? "default" : "ghost"}
-                            className={cn(
-                                "h-8 w-8 p-0 flex-shrink-0 text-sm font-medium rounded-full mb-2 mx-auto transition-all duration-200",
-                                selectedMinute === m ? "shadow-lg shadow-primary/40 bg-primary text-white scale-110" : "hover:bg-primary/10 hover:text-primary"
-                            )}
-                            onClick={() => handleMinuteChange(m)}
-                        >
-                            {m.toString().padStart(2, "0")}
-                        </Button>
-                    ))}
+
+                {/* Minutes Column */}
+                <div className="flex flex-col items-center gap-3">
+                    <span className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest">Menit</span>
+                    <div className="flex flex-col h-[220px] overflow-y-auto p-2 w-14 no-scrollbar scroll-smooth space-y-2 snap-y snap-mandatory">
+                        {minutes.map((m) => (
+                            <button
+                                key={m}
+                                ref={(el) => (minuteRefs.current[m] = el)}
+                                onClick={() => handleMinuteChange(m)}
+                                className={cn(
+                                    "h-10 w-10 flex-shrink-0 flex items-center justify-center text-sm font-bold rounded-xl transition-all duration-200 snap-center",
+                                    selectedMinute === m 
+                                        ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-110" 
+                                        : "text-neutral-400 hover:bg-blue-50 hover:text-blue-600"
+                                )}
+                            >
+                                {m.toString().padStart(2, "0")}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
+            
+            <style dangerouslySetInnerHTML={{ __html: `
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            `}} />
         </div>
     );
 }
