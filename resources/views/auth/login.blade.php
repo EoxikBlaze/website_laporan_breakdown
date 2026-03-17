@@ -138,24 +138,24 @@
                 <circle cx="34" cy="14" r="4" fill="rgba(255,255,255,0.75)"/>
             </svg>
         </div>
-        <h1 class="brand-title">General Service<br>Management System</h1>
+        <h1 class="brand-title">General Service<br>System</h1>
         <p class="brand-subtitle">PT. Pamapersada Nusantara<br>Site ARIA</p>
         <div class="brand-badge">
             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            Sistem Manajemen Breakdown
+            General Service PAMA ARIA
         </div>
         <ul class="feature-list">
             <li>
                 <span class="feature-check"><svg width="10" height="10" fill="white" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></span>
-                Rekam & Kelola Laporan Breakdown
+                GAK TAU ISI APA HEHE
             </li>
             <li>
                 <span class="feature-check"><svg width="10" height="10" fill="white" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></span>
-                Monitor Status Unit & Vendor
+                GAK TAU ISI APA HEHE
             </li>
             <li>
                 <span class="feature-check"><svg width="10" height="10" fill="white" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></span>
-                Ekspor Laporan ke Excel
+                LAH
             </li>
         </ul>
     </div>
@@ -165,7 +165,7 @@
         <div class="login-card">
             <div class="login-header">
                 <h1>Selamat Datang</h1>
-                <p>Masuk untuk mengakses sistem manajemen</p>
+                <p>Masuk</p>
             </div>
 
             @if($errors->any())
@@ -190,7 +190,7 @@
                         placeholder="••••••••" required>
                 </div>
 
-                <button type="submit" class="btn-login">Masuk ke Sistem</button>
+                <button type="submit" class="btn-login">P LOGIN</button>
             </form>
 
             <p class="footer-note">

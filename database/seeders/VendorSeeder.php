@@ -13,12 +13,36 @@ class VendorSeeder extends Seeder
     public function run(): void
     {
         $vendors = [
-            ['nama_vendor' => 'PT. Jejak Hasanah', 'kontak' => '-', 'keterangan' => 'Vendor baru'],
-            ['nama_vendor' => 'CV. BINA INTI PERSADA', 'kontak' => '-', 'keterangan' => 'Vendor baru'],
+            [
+                'nama_vendor' => 'PT. Jejak Hasanah', 
+                'kontak' => '-', 
+                'keterangan' => 'Vendor baru',
+                'email' => 'operator.jejak@gsportalaria.com'
+            ],
+            [
+                'nama_vendor' => 'CV. BINA INTI PERSADA', 
+                'kontak' => '-', 
+                'keterangan' => 'Vendor baru',
+                'email' => 'operator.binainti@gsportalaria.com'
+            ],
         ];
 
-        foreach ($vendors as $vendor) {
-            Vendor::firstOrCreate(['nama_vendor' => $vendor['nama_vendor']], $vendor);
+        foreach ($vendors as $v) {
+            $vendor = \App\Models\Vendor::firstOrCreate(
+                ['nama_vendor' => $v['nama_vendor']], 
+                ['kontak' => $v['kontak'], 'keterangan' => $v['keterangan']]
+            );
+
+            // Auto-create operator for each vendor if not exists
+            \App\Models\User::firstOrCreate(
+                ['email' => $v['email']],
+                [
+                    'name' => 'Operator ' . $v['nama_vendor'],
+                    'password' => \Illuminate\Support\Facades\Hash::make('vendor123'),
+                    'role' => 'operator',
+                    'vendor_id' => $vendor->id,
+                ]
+            );
         }
     }
 }

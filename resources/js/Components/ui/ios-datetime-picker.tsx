@@ -45,60 +45,68 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                    className="w-[92vw] sm:w-[320px] p-0 border border-neutral-200 shadow-2xl rounded-[24px] overflow-hidden bg-white mt-2" 
+                    className="w-[92vw] sm:w-auto p-0 border border-neutral-200 shadow-2xl rounded-[24px] overflow-hidden bg-white mt-2" 
                     align="start"
                     sideOffset={5}
                 >
                     <div className="flex flex-col">
-                        {/* Selected Time Display */}
-                        <div className="px-6 py-4 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
-                            <p className="text-[10px] uppercase tracking-[0.2em] font-black opacity-70 mb-1">Tanggal & Waktu</p>
-                            <div className="flex items-center justify-between">
-                                <span className="text-base font-bold">
+                        {/* Selected Time Display - Stays horizontal at top */}
+                        <div className="px-6 py-4 bg-gradient-to-br from-blue-700 to-blue-900 text-white">
+                            <p className="text-[10px] uppercase tracking-[0.2em] font-black opacity-70 mb-1">Konfigurasi Waktu</p>
+                            <div className="flex items-center justify-between gap-8">
+                                <span className="text-base font-bold truncate">
                                     {date ? format(date, "dd MMMM yyyy", { locale: id }) : "Pilih Tanggal"}
                                 </span>
-                                <div className="px-2 py-1 bg-white/20 rounded-lg text-xs font-black backdrop-blur-md">
+                                <div className="px-3 py-1.5 bg-white/20 rounded-xl text-sm font-black backdrop-blur-md border border-white/10 shrink-0">
                                     {date ? format(date, "HH:mm") : "--:--"}
                                 </div>
                             </div>
                         </div>
 
-                        {/* Interactive Area */}
-                        <div className="p-1">
-                            <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={(d) => d && setDate(prev => {
-                                    if (!prev) return d;
-                                    const newDate = new Date(d);
-                                    newDate.setHours(prev.getHours());
-                                    newDate.setMinutes(prev.getMinutes());
-                                    return newDate;
-                                })}
-                                locale={id}
-                                className="p-3"
-                            />
-                        </div>
-
-                        <div className="px-6 py-4 border-t border-neutral-100 bg-neutral-50/50">
-                            <div className="flex items-center gap-2 mb-4">
-                                <div className="p-1.5 bg-blue-100 rounded-lg text-blue-600">
-                                    <Clock size={14} />
-                                </div>
-                                <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider">Setel Jam</span>
+                        {/* Interactive Area - Side-by-side on sm+ */}
+                        <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-neutral-100">
+                            {/* Left: Calendar */}
+                            <div className="p-2 sm:p-4">
+                                <Calendar
+                                    mode="single"
+                                    selected={date}
+                                    onSelect={(d) => d && setDate(prev => {
+                                        if (!prev) return d;
+                                        const newDate = new Date(d);
+                                        newDate.setHours(prev.getHours());
+                                        newDate.setMinutes(prev.getMinutes());
+                                        return newDate;
+                                    })}
+                                    locale={id}
+                                    className="p-1"
+                                />
                             </div>
-                            
-                            <TimePicker 
-                                value={date} 
-                                onChange={handleTimeChange} 
-                            />
-                            
-                            <Button 
-                                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 shadow-lg shadow-blue-500/20 font-bold transition-all active:scale-[0.98] text-sm"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                Konfirmasi Waktu
-                            </Button>
+
+                            {/* Right: Clock & Action */}
+                            <div className="px-6 py-6 sm:w-[220px] bg-neutral-50/50 flex flex-col justify-between">
+                                <div>
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <div className="p-1.5 bg-blue-100 rounded-lg text-blue-600">
+                                            <Clock size={14} />
+                                        </div>
+                                        <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider">Setel Jam</span>
+                                    </div>
+                                    
+                                    <div className="scale-90 origin-top-left">
+                                        <TimePicker 
+                                            value={date} 
+                                            onChange={handleTimeChange} 
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <Button 
+                                    className="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 shadow-lg shadow-blue-500/20 font-bold transition-all active:scale-[0.98] text-sm"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    Konfirmasi
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </PopoverContent>
