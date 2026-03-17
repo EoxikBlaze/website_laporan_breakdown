@@ -12,35 +12,49 @@
 @endpush
 
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card shadow-sm border-0">
-            <div class="card-header" style="background: linear-gradient(135deg,#1a1a2e,#0f3460); color:#fff;">
-                <h3 class="card-title mt-1"><i class="fas fa-edit mr-2"></i> Edit Laporan: {{ $breakdownLog->unit->nomor_lambung }}</h3>
-            </div>
-            <form action="{{ route('breakdown_logs.update', $breakdownLog->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 border-right">
-                            <h5 class="text-muted mb-4"><i class="fas fa-truck-pickup mr-2"></i> Informasi Unit</h5>
-                            
-                            <div class="form-group">
-                                <label for="unit_id">Unit Rusak <span class="text-danger">*</span></label>
-                                <select name="unit_id" id="unit_id" class="form-control select2" required>
+<div class="max-w-6xl mx-auto">
+    <form action="{{ route('breakdown_logs.update', $breakdownLog->id) }}" method="POST">
+        @csrf
+        @method('PUT')
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column: Unit Information -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-700 to-blue-900 px-6 py-4">
+                        <div class="flex items-center gap-3 text-white">
+                            <div class="p-2 bg-white/10 rounded-lg">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Edit Laporan</h3>
+                                <p class="text-xs text-blue-100 opacity-80">Perbarui informasi breakdown unit {{ $breakdownLog->unit->nomor_lambung }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-6">
+                        <div class="flex items-center gap-2 pb-2 border-b border-neutral-100">
+                            <i class="fas fa-truck-pickup text-blue-600"></i>
+                            <h5 class="text-sm font-bold text-neutral-700">Informasi Unit</h5>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Rusak <span class="text-rose-500">*</span></label>
+                                <select name="unit_id" id="unit_id" class="select2 w-full" required>
                                     @foreach($units as $unit)
                                         <option value="{{ $unit->id }}" {{ old('unit_id', $breakdownLog->unit_id) == $unit->id ? 'selected' : '' }}>
                                             {{ $unit->nomor_lambung }} - {{ $unit->jenis_unit }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('unit_id') <span class="text-danger small">{{ $message }}</span> @enderror
+                                @error('unit_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                             </div>
 
-                            <div class="form-group">
-                                <label for="spare_unit_id">Unit Pengganti (Spare Unit)</label>
-                                <select name="spare_unit_id" id="spare_unit_id" class="form-control select2">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Pengganti (Spare Unit)</label>
+                                <select name="spare_unit_id" id="spare_unit_id" class="select2 w-full">
                                     <option value="">Tidak Menggunakan Spare</option>
                                     @foreach($spareUnits as $spare)
                                         <option value="{{ $spare->id }}" {{ old('spare_unit_id', $breakdownLog->spare_unit_id) == $spare->id ? 'selected' : '' }}>
@@ -48,67 +62,87 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('spare_unit_id') <span class="text-danger small">{{ $message }}</span> @enderror
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6 pl-md-4">
-                            <h5 class="text-muted mb-4"><i class="fas fa-clock mr-2"></i> Timeline & Status</h5>
-
-                             <div class="form-group">
-                                <label for="waktu_awal_bd">Waktu Awal Breakdown <span class="text-danger">*</span></label>
-                                <div data-react-component="IosDateTimePicker" 
-                                     data-props="{{ json_encode(['name' => 'waktu_awal_bd', 'initialValue' => \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('Y-m-d\TH:i')]) }}">
-                                </div>
-                                @error('waktu_awal_bd') <span class="text-danger small">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="form-group" id="spare-time-container" style="display: none;">
-                                <label for="waktu_spare_datang">Waktu Spare Datang</label>
-                                <div data-react-component="IosDateTimePicker" 
-                                     data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'initialValue' => $breakdownLog->waktu_spare_datang ? \Carbon\Carbon::parse($breakdownLog->waktu_spare_datang)->format('Y-m-d\TH:i') : null]) }}">
-                                </div>
-                                @error('waktu_spare_datang') <span class="text-danger small">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="waktu_akhir_bd">Waktu Selesai Breakdown (Closed)</label>
-                                <div data-react-component="IosDateTimePicker" 
-                                     data-props="{{ json_encode(['name' => 'waktu_akhir_bd', 'initialValue' => $breakdownLog->waktu_akhir_bd ? \Carbon\Carbon::parse($breakdownLog->waktu_akhir_bd)->format('Y-m-d\TH:i') : null]) }}">
-                                </div>
-                                @error('waktu_akhir_bd') <span class="text-danger small">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="status">Status Laporan</label>
-                                <select name="status" id="status" class="form-control" required>
-                                    <option value="Open" {{ old('status', $breakdownLog->status) == 'Open' ? 'selected' : '' }}>Open</option>
-                                    <option value="Closed" {{ old('status', $breakdownLog->status) == 'Closed' ? 'selected' : '' }}>Closed</option>
-                                </select>
+                                @error('spare_unit_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group mt-3">
-                                <label for="keterangan">Keterangan / Detail Kerusakan</label>
-                                <textarea name="keterangan" id="keterangan" rows="3" 
-                                          class="form-control @error('keterangan') is-invalid @enderror" 
-                                          placeholder="Ceritakan detail kerusakan unit...">{{ old('keterangan', $breakdownLog->keterangan) }}</textarea>
-                                @error('keterangan') <span class="invalid-feedback">{{ $message }}</span> @enderror
-                            </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Keterangan / Detail Kerusakan</label>
+                            <textarea name="keterangan" id="keterangan" rows="4" 
+                                      class="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none"
+                                      placeholder="Ceritakan detail kerusakan unit...">{{ old('keterangan', $breakdownLog->keterangan) }}</textarea>
+                            @error('keterangan') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
                 </div>
-                <div class="card-footer bg-white text-right">
-                    <a href="{{ route('breakdown_logs.index') }}" class="btn btn-secondary px-4 mr-2">Batal</a>
-                    <button type="submit" class="btn btn-primary px-4">Perbarui Laporan</button>
+            </div>
+
+            <!-- Right Column: Timeline & Status -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden sticky top-6">
+                    <div class="bg-blue-50 px-6 py-4 border-b border-neutral-100">
+                        <div class="flex items-center gap-2 text-blue-700">
+                            <i class="fas fa-history"></i>
+                            <h5 class="text-sm font-bold uppercase tracking-wider">Timeline & Status</h5>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-5">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Mulai Breakdown <span class="text-rose-500">*</span></label>
+                            <div data-react-component="IosDateTimePicker" 
+                                 data-props="{{ json_encode(['name' => 'waktu_awal_bd', 'initialValue' => \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('Y-m-d\TH:i')]) }}">
+                            </div>
+                            @error('waktu_awal_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div id="spare-time-container" class="space-y-2" style="display: none;">
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Spare Unit Datang</label>
+                            <div data-react-component="IosDateTimePicker" 
+                                 data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'initialValue' => $breakdownLog->waktu_spare_datang ? \Carbon\Carbon::parse($breakdownLog->waktu_spare_datang)->format('Y-m-d\TH:i') : null]) }}">
+                            </div>
+                            @error('waktu_spare_datang') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Selesai Breakdown (Closed)</label>
+                            <div data-react-component="IosDateTimePicker" 
+                                 data-props="{{ json_encode(['name' => 'waktu_akhir_bd', 'initialValue' => $breakdownLog->waktu_akhir_bd ? \Carbon\Carbon::parse($breakdownLog->waktu_akhir_bd)->format('Y-m-d\TH:i') : null]) }}">
+                            </div>
+                            @error('waktu_akhir_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="space-y-2 border-t border-neutral-100 pt-4">
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Status Sekarang</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="cursor-pointer group">
+                                    <input type="radio" name="status" value="Open" {{ old('status', $breakdownLog->status) == 'Open' ? 'checked' : '' }} class="peer hidden">
+                                    <div class="flex items-center justify-center p-2 rounded-xl border border-neutral-200 text-xs font-bold text-neutral-400 group-hover:bg-neutral-50 peer-checked:border-rose-500 peer-checked:bg-rose-50 peer-checked:text-rose-600 transition-all">
+                                        OPEN
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer group">
+                                    <input type="radio" name="status" value="Closed" {{ old('status', $breakdownLog->status) == 'Closed' ? 'checked' : '' }} class="peer hidden">
+                                    <div class="flex items-center justify-center p-2 rounded-xl border border-neutral-200 text-xs font-bold text-neutral-400 group-hover:bg-neutral-50 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-600 transition-all">
+                                        CLOSED
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 flex flex-col gap-2">
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-[0.98]">
+                                Simpan Perubahan
+                            </button>
+                            <a href="{{ route('breakdown_logs.index') }}" class="w-full text-center py-3 text-sm font-bold text-neutral-400 hover:text-neutral-600 transition-colors">
+                                Batal
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 @endsection
 

@@ -20,8 +20,8 @@
 
     @stack('styles')
 
-    <!-- Vite -->
-    @vite(['resources/js/app.tsx'])
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.tsx'])
 </head>
 
 @php
