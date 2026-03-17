@@ -49,8 +49,7 @@
             <div class="p-6">
                 <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Total Loss Time</p>
                 <div class="flex items-baseline gap-1">
-                    <span class="text-xl font-black text-rose-600">{{ $breakdownLog->loss_time ?? '0.00' }}</span>
-                    <span class="text-[10px] font-bold text-neutral-400 uppercase">Jam</span>
+                    <span class="text-xl font-black text-rose-600">{{ $breakdownLog->loss_time ?? '0 Menit' }}</span>
                 </div>
             </div>
             <div class="p-6">
@@ -149,7 +148,7 @@
                         </div>
 
                         <!-- Spare Datang -->
-                        @if($breakdownLog->spareUnit)
+                        @if($breakdownLog->spare_unit_id)
                             <div class="relative flex gap-4">
                                 <div class="relative z-10 w-6 h-6 rounded-full bg-blue-50 border-2 border-blue-500 border-white flex items-center justify-center">
                                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
@@ -190,8 +189,8 @@
                 <p class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 mb-4">Efisiensi Breakdown</p>
                 <div class="space-y-4">
                     <div class="flex justify-between items-end border-b border-white/10 pb-3">
-                        <span class="text-xs font-bold opacity-80">Tanpa Spare</span>
-                        <span class="text-xl font-black">{{ $breakdownLog->lama_bd_tanpa_spare ?? '0' }} <small class="text-[10px] opacity-60">Jam</small></span>
+                        <span class="text-xs font-bold opacity-80">{{ $breakdownLog->spare_unit_id ? 'Efisiensi Spare' : 'Tanpa Spare' }}</span>
+                        <span class="text-xl font-black">{{ $breakdownLog->lama_bd_tanpa_spare ?? $breakdownLog->loss_time ?? '0 Menit' }}</span>
                     </div>
                 </div>
                 <div class="mt-6 p-3 bg-white/10 rounded-xl">

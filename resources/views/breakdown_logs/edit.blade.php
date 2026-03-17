@@ -155,12 +155,25 @@
             width: '100%'
         });
 
-        // Conditional visibility for spare arrival time
+        // Automatic status closing when finish time is filled
+        $(document).on('change', 'input[name="waktu_akhir_bd"]', function() {
+            if ($(this).val()) {
+                $('input[name="status"][value="Closed"]').prop('checked', true);
+            }
+        });
+
+        // Initial check for finish time to set status visually if needed
+        if ($('input[name="waktu_akhir_bd"]').val()) {
+            $('input[name="status"][value="Closed"]').prop('checked', true);
+        }
+
         function toggleSpareTime() {
             if ($('#spare_unit_id').val()) {
                 $('#spare-time-container').slideDown();
             } else {
                 $('#spare-time-container').slideUp();
+                // Clear spare time if no spare unit
+                $('input[name="waktu_spare_datang"]').val('');
             }
         }
 

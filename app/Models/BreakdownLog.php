@@ -91,10 +91,14 @@ class BreakdownLog extends Model
                 $awal = Carbon::parse($this->waktu_awal_bd);
                 $akhir = Carbon::parse($this->waktu_akhir_bd);
 
-                return $awal->diffForHumans($akhir, [
-                    'syntax' => Carbon::DIFF_ABSOLUTE,
-                    'parts' => 3,
-                ]);
+                // For breakdown logs, we usually only care about hours and minutes
+                $diff = $awal->diff($akhir);
+                $parts = [];
+                if ($diff->d > 0) $parts[] = $diff->d . ' Hari';
+                if ($diff->h > 0) $parts[] = $diff->h . ' Jam';
+                if ($diff->i > 0) $parts[] = $diff->i . ' Menit';
+
+                return count($parts) > 0 ? implode(' ', $parts) : '0 Menit';
             }
         );
     }
@@ -113,10 +117,13 @@ class BreakdownLog extends Model
                 $awal = Carbon::parse($this->waktu_awal_bd);
                 $spare = Carbon::parse($this->waktu_spare_datang);
 
-                return $awal->diffForHumans($spare, [
-                    'syntax' => Carbon::DIFF_ABSOLUTE,
-                    'parts' => 3,
-                ]);
+                $diff = $awal->diff($spare);
+                $parts = [];
+                if ($diff->d > 0) $parts[] = $diff->d . ' Hari';
+                if ($diff->h > 0) $parts[] = $diff->h . ' Jam';
+                if ($diff->i > 0) $parts[] = $diff->i . ' Menit';
+
+                return count($parts) > 0 ? implode(' ', $parts) : '0 Menit';
             }
         );
     }
