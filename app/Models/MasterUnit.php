@@ -32,9 +32,11 @@ class MasterUnit extends Model
             if (is_null($unit->vendor_id)) {
                 $prefix = strtoupper(substr($unit->nomor_lambung, 0, 4));
                 if ($prefix === 'ARBI') {
-                    $unit->vendor_id = 5; // CV BINA INTI PERSADA
+                    $vendor = \App\Models\Vendor::where('nama_vendor', 'CV. BINA INTI PERSADA')->first();
+                    if ($vendor) $unit->vendor_id = $vendor->id;
                 } elseif ($prefix === 'ARJH') {
-                    $unit->vendor_id = 4; // PT Jejak Hasanah
+                    $vendor = \App\Models\Vendor::where('nama_vendor', 'PT. Jejak Hasanah')->first();
+                    if ($vendor) $unit->vendor_id = $vendor->id;
                 }
             }
         });
