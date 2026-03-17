@@ -2,7 +2,7 @@
 @section('title', 'Edit User')
 @section('page-title', 'Edit User')
 
-@@section('content')
+@section('content')
 <div class="max-w-2xl mx-auto">
     <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden">
         <div class="bg-gradient-to-r from-blue-700 to-blue-900 px-6 py-5">
