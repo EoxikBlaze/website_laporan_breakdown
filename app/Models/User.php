@@ -17,7 +17,13 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'vendor_id',
     ];
+
+    public function vendor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Vendor::class);
+    }
 
     public function isSuperAdmin(): bool
     {

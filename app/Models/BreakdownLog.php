@@ -29,6 +29,12 @@ class BreakdownLog extends Model
      */
     protected static function booted(): void
     {
+        static::addGlobalScope('vendor', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            if (auth()->check() && auth()->user()->isOperator() && auth()->user()->vendor_id) {
+                $builder->where('vendor_id', auth()->user()->vendor_id);
+            }
+        });
+
         static::saving(function (BreakdownLog $log) {
             // 1. Auto-assign vendor from unit if not manually set or if unit changed
             if ($log->unit_id) {

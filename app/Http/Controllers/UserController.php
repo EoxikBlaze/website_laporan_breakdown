@@ -20,7 +20,8 @@ class UserController extends Controller
     public function create()
     {
         Gate::authorize('manage-users');
-        return view('users.create');
+        $vendors = \App\Models\Vendor::all();
+        return view('users.create', compact('vendors'));
     }
 
     public function store(Request $request)
@@ -28,10 +29,11 @@ class UserController extends Controller
         Gate::authorize('manage-users');
 
         $validated = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'role'     => ['required', Rule::in(['super_admin', 'operator'])],
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|email|unique:users,email',
+            'password'  => 'required|string|min:8|confirmed',
+            'role'      => ['required', Rule::in(['super_admin', 'operator'])],
+            'vendor_id' => 'required_if:role,operator|nullable|exists:vendors,id',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -45,7 +47,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         Gate::authorize('manage-users');
-        return view('users.edit', compact('user'));
+        $vendors = \App\Models\Vendor::all();
+        return view('users.edit', compact('user', 'vendors'));
     }
 
     public function update(Request $request, User $user)
@@ -53,9 +56,10 @@ class UserController extends Controller
         Gate::authorize('manage-users');
 
         $validated = $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
-            'role'  => ['required', Rule::in(['super_admin', 'operator'])],
+            'name'      => 'required|string|max:255',
+            'email'     => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+            'role'      => ['required', Rule::in(['super_admin', 'operator'])],
+            'vendor_id' => 'required_if:role,operator|nullable|exists:vendors,id',
         ]);
 
         if ($request->filled('password')) {

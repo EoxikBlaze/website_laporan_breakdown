@@ -44,6 +44,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Seed Vendors
+        $this->call(VendorSeeder::class);
+
         // Seed Master Units
         $this->call(MasterUnitSeeder::class);
     }

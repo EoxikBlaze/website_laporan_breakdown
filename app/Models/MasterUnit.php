@@ -18,6 +18,18 @@ class MasterUnit extends Model
     ];
 
     /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('vendor', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            if (auth()->check() && auth()->user()->isOperator() && auth()->user()->vendor_id) {
+                $builder->where('vendor_id', auth()->user()->vendor_id);
+            }
+        });
+    }
+
+    /**
      * Get the vendor associated with this unit.
      */
     public function vendor(): \Illuminate\Database\Eloquent\Relations\BelongsTo

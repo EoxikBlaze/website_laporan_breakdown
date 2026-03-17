@@ -2,7 +2,7 @@
 @section('title', 'Edit User')
 @section('page-title', 'Edit User')
 
-@section('content')
+@@section('content')
 <div class="max-w-2xl mx-auto">
     <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden">
         <div class="bg-gradient-to-r from-blue-700 to-blue-900 px-6 py-5">
@@ -35,14 +35,28 @@
                 @error('email') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
             </div>
 
-            <div class="space-y-2">
-                <label for="role" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Level Akses <span class="text-rose-500">*</span></label>
-                <select id="role" name="role" required
-                        class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none appearance-none bg-white">
-                    <option value="super_admin" {{ old('role', $user->role) === 'super_admin' ? 'selected' : '' }}>Super Admin (Akses Penuh)</option>
-                    <option value="operator" {{ old('role', $user->role) === 'operator' ? 'selected' : '' }}>Operator (Penginput Laporan)</option>
-                </select>
-                @error('role') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label for="role" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Level Akses <span class="text-rose-500">*</span></label>
+                    <select id="role" name="role" required
+                            class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none appearance-none bg-white">
+                        <option value="super_admin" {{ old('role', $user->role) === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                        <option value="operator" {{ old('role', $user->role) === 'operator' ? 'selected' : '' }}>Operator</option>
+                    </select>
+                    @error('role') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="space-y-2" id="vendor-container" style="display: {{ old('role', $user->role) === 'operator' ? 'block' : 'none' }}">
+                    <label for="vendor_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Vendor Mitra <span class="text-rose-500">*</span></label>
+                    <select id="vendor_id" name="vendor_id" 
+                            class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none bg-white appearance-none">
+                        <option value="">-- Pilih Vendor --</option>
+                        @foreach($vendors as $vendor)
+                            <option value="{{ $vendor->id }}" {{ old('vendor_id', $user->vendor_id) == $vendor->id ? 'selected' : '' }}>{{ $vendor->nama_vendor }}</option>
+                        @endforeach
+                    </select>
+                    @error('vendor_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
+                </div>
             </div>
 
             <div class="p-5 bg-neutral-50 rounded-2xl border border-neutral-100 space-y-4">
@@ -56,14 +70,14 @@
                         Password Baru <span class="text-[10px] text-neutral-400 font-normal lowercase">(kosongkan jika tidak diubah)</span>
                     </label>
                     <input type="password" id="password" name="password" placeholder="Minimal 8 karakter"
-                           class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none">
+                           class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none shadow-sm">
                     @error('password') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="space-y-2">
                     <label for="password_confirmation" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Konfirmasi Password Baru</label>
                     <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Ulangi password baru..."
-                           class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none">
+                           class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none shadow-sm">
                 </div>
             </div>
 
@@ -78,4 +92,17 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('role').addEventListener('change', function() {
+        const vendorContainer = document.getElementById('vendor-container');
+        if (this.value === 'operator') {
+            vendorContainer.style.display = 'block';
+            document.getElementById('vendor_id').setAttribute('required', 'required');
+        } else {
+            vendorContainer.style.display = 'none';
+            document.getElementById('vendor_id').removeAttribute('required');
+        }
+    });
+</script>
 @endsection
