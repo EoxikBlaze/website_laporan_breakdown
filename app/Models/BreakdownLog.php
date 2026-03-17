@@ -44,9 +44,16 @@ class BreakdownLog extends Model
                 }
             }
 
-            // 2. Auto-close if waktu_akhir_bd is filled
+            // 2. Clear spare arrival time if no spare unit is assigned
+            if (!$log->spare_unit_id) {
+                $log->waktu_spare_datang = null;
+            }
+
+            // 3. Auto-status based on waktu_akhir_bd
             if ($log->waktu_akhir_bd) {
                 $log->status = 'Closed';
+            } else {
+                $log->status = 'Open';
             }
         });
     }

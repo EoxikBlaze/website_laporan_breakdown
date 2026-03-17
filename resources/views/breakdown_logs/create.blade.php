@@ -94,7 +94,7 @@
                             @error('waktu_awal_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
 
-                        <div class="space-y-2 overflow-hidden" id="spare-time-container" style="display: none;">
+                        <div class="space-y-2" id="spare-time-container" style="display: none;">
                             <label for="waktu_spare_datang" class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
                                 Waktu Spare Datang
                             </label>
@@ -102,6 +102,16 @@
                                  data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'initialValue' => old('waktu_spare_datang')]) }}">
                             </div>
                             @error('waktu_spare_datang') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="waktu_akhir_bd" class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
+                                Waktu Selesai Breakdown (Closed)
+                            </label>
+                            <div data-react-component="IosDateTimePicker" 
+                                 data-props="{{ json_encode(['name' => 'waktu_akhir_bd', 'initialValue' => old('waktu_akhir_bd')]) }}">
+                            </div>
+                            @error('waktu_akhir_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <div class="space-y-2">
@@ -170,6 +180,15 @@
 
         $('#spare_unit_id').on('change', toggleSpareTime);
         toggleSpareTime(); // Run on load
+
+        // Automatic status closing when finish time is filled
+        $(document).on('change', 'input[name="waktu_akhir_bd"]', function() {
+            if ($(this).val()) {
+                $('#status').val('Closed');
+            } else {
+                $('#status').val('Open');
+            }
+        });
     });
 </script>
 @endpush

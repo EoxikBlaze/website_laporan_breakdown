@@ -159,6 +159,8 @@
         $(document).on('change', 'input[name="waktu_akhir_bd"]', function() {
             if ($(this).val()) {
                 $('input[name="status"][value="Closed"]').prop('checked', true);
+            } else {
+                $('input[name="status"][value="Open"]').prop('checked', true);
             }
         });
 
