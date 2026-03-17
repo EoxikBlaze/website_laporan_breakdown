@@ -29,6 +29,7 @@
         'user' => [
             'name'  => Auth::user()->name  ?? 'User',
             'email' => Auth::user()->email ?? '',
+            'role'  => Auth::user()->role  ?? 'operator',
         ],
         'routes' => [
             'dashboard'     => route('dashboard'),
@@ -73,7 +74,11 @@
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-white leading-none">{{ Auth::user()->name ?? 'User' }}</p>
-                            <p class="text-[10px] text-blue-100 mt-0.5">{{ Auth::user()->role === 'super_admin' ? 'Super Admin' : 'Operator' }}</p>
+                            <p class="text-[10px] text-blue-100 mt-0.5">
+                                @if(Auth::user()->role === 'super_admin') Super Admin 
+                                @elseif(Auth::user()->role === 'vendor_admin') Admin Vendor 
+                                @else Operator @endif
+                            </p>
                         </div>
                     </div>
                 </div>

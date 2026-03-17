@@ -18,6 +18,7 @@ interface AppSidebarProps {
   user: {
     name: string;
     email: string;
+    role: string;
   };
   routes: {
     dashboard: string;
