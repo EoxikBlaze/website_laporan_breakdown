@@ -46,27 +46,22 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                    className="w-[95vw] md:w-[380px] p-0 border-none shadow-2xl rounded-[24px] overflow-hidden bg-white max-h-[90vh] overflow-y-auto" 
+                    className="w-[90vw] md:w-[320px] p-0 border-none shadow-xl rounded-[20px] overflow-hidden bg-white max-h-[85vh] overflow-y-auto" 
                     align="start"
                 >
                     <div className="flex flex-col divide-y divide-neutral-100">
                         {/* Header Section */}
-                        <div className="px-6 py-4 bg-blue-50/50">
+                        <div className="px-5 py-3 bg-blue-50/50">
                             <div className="flex flex-col text-blue-700">
-                                <span className="text-[10px] uppercase tracking-[0.2em] font-black opacity-60">Waktu Terpilih</span>
-                                <span className="text-base font-bold">
-                                    {date ? format(date, "EEEE, dd MMMM yyyy", { locale: id }) : "Pilih Tanggal"}
+                                <span className="text-[9px] uppercase tracking-wider font-extrabold opacity-60">Waktu Terpilih</span>
+                                <span className="text-sm font-bold">
+                                    {date ? format(date, "EEEE, dd MMM yyyy", { locale: id }) : "Pilih Tanggal"}
                                 </span>
-                                {date && (
-                                    <span className="text-sm font-medium opacity-80 mt-0.5">
-                                        Pukul {format(date, "HH:mm")} WIB
-                                    </span>
-                                )}
                             </div>
                         </div>
 
                         {/* Calendar Part */}
-                        <div className="p-4 flex justify-center">
+                        <div className="p-2 flex justify-center scale-[0.95] origin-top">
                             <Calendar
                                 mode="single"
                                 selected={date}
@@ -78,33 +73,30 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                         </div>
 
                         {/* Middle Divider with Icon */}
-                        <div className="relative py-2 flex items-center justify-center">
-                            <div className="absolute inset-0 flex items-center px-8">
-                                <div className="w-full border-t border-dashed border-neutral-200"></div>
+                        <div className="relative py-1 flex items-center justify-center">
+                            <div className="absolute inset-0 flex items-center px-6">
+                                <div className="w-full border-t border-dashed border-neutral-100"></div>
                             </div>
-                            <div className="relative bg-white px-3 flex items-center gap-2 text-neutral-400">
-                                <Clock size={14} />
-                                <span className="text-[10px] font-bold uppercase tracking-widest leading-none">Pilih Waktu</span>
+                            <div className="relative bg-white px-2 flex items-center gap-1.5 text-neutral-400">
+                                <Clock size={12} />
+                                <span className="text-[9px] font-bold uppercase tracking-wider leading-none">Waktu</span>
                             </div>
                         </div>
 
                         {/* Clock Part */}
-                        <div className="p-6">
+                        <div className="p-4 pt-2">
                             <TimePicker 
                                 value={date} 
                                 onChange={handleTimeChange} 
                             />
                             
-                            <div className="mt-6">
+                            <div className="mt-4">
                                 <Button 
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-2xl h-12 shadow-xl shadow-blue-600/20 font-bold transition-all active:scale-[0.98]"
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-10 shadow-lg shadow-blue-600/20 font-bold transition-all active:scale-[0.98] text-xs"
                                     onClick={() => setIsOpen(false)}
                                 >
-                                    Konfirmasi & Selesai
+                                    Selesai
                                 </Button>
-                                <p className="text-[10px] text-center text-neutral-400 mt-3 italic">
-                                    Ketuk tombol di atas untuk menyimpan pilihan
-                                </p>
                             </div>
                         </div>
                     </div>

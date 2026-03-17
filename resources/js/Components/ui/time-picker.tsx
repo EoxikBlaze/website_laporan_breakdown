@@ -45,21 +45,21 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
     };
 
     return (
-        <div className="w-full bg-white rounded-2xl border border-neutral-100 overflow-hidden shadow-sm p-4">
-            <div className="flex gap-8 justify-center">
+        <div className="w-full bg-white rounded-xl border border-neutral-100 overflow-hidden shadow-sm p-3">
+            <div className="flex gap-4 justify-center">
                 {/* Hours Column */}
-                <div className="flex flex-col items-center gap-3">
-                    <span className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest">Jam</span>
-                    <div className="flex flex-col h-[220px] overflow-y-auto p-2 w-14 no-scrollbar scroll-smooth space-y-2 snap-y snap-mandatory">
+                <div className="flex flex-col items-center gap-2">
+                    <span className="text-[9px] uppercase font-bold text-neutral-400 tracking-widest">Jam</span>
+                    <div className="flex flex-col h-[150px] overflow-y-auto px-1 w-12 no-scrollbar scroll-smooth space-y-1 snap-y snap-mandatory">
                         {hours.map((h) => (
                             <button
                                 key={h}
                                 ref={(el) => (hourRefs.current[h] = el)}
                                 onClick={() => handleHourChange(h)}
                                 className={cn(
-                                    "h-10 w-10 flex-shrink-0 flex items-center justify-center text-sm font-bold rounded-xl transition-all duration-200 snap-center",
+                                    "h-8 w-8 flex-shrink-0 flex items-center justify-center text-xs font-bold rounded-lg transition-all duration-200 snap-center",
                                     selectedHour === h 
-                                        ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-110" 
+                                        ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-105" 
                                         : "text-neutral-400 hover:bg-blue-50 hover:text-blue-600"
                                 )}
                             >
@@ -69,23 +69,23 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
                     </div>
                 </div>
 
-                <div className="flex flex-col justify-center pt-6">
-                    <span className="text-xl font-bold text-neutral-300 animate-pulse">:</span>
+                <div className="flex flex-col justify-center pt-4">
+                    <span className="text-lg font-bold text-neutral-300">:</span>
                 </div>
 
                 {/* Minutes Column */}
-                <div className="flex flex-col items-center gap-3">
-                    <span className="text-[10px] uppercase font-bold text-neutral-400 tracking-widest">Menit</span>
-                    <div className="flex flex-col h-[220px] overflow-y-auto p-2 w-14 no-scrollbar scroll-smooth space-y-2 snap-y snap-mandatory">
+                <div className="flex flex-col items-center gap-2">
+                    <span className="text-[9px] uppercase font-bold text-neutral-400 tracking-widest">Menit</span>
+                    <div className="flex flex-col h-[150px] overflow-y-auto px-1 w-12 no-scrollbar scroll-smooth space-y-1 snap-y snap-mandatory">
                         {minutes.map((m) => (
                             <button
                                 key={m}
                                 ref={(el) => (minuteRefs.current[m] = el)}
                                 onClick={() => handleMinuteChange(m)}
                                 className={cn(
-                                    "h-10 w-10 flex-shrink-0 flex items-center justify-center text-sm font-bold rounded-xl transition-all duration-200 snap-center",
+                                    "h-8 w-8 flex-shrink-0 flex items-center justify-center text-xs font-bold rounded-lg transition-all duration-200 snap-center",
                                     selectedMinute === m 
-                                        ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-110" 
+                                        ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-105" 
                                         : "text-neutral-400 hover:bg-blue-50 hover:text-blue-600"
                                 )}
                             >
