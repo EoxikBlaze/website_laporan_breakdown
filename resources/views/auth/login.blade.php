@@ -190,6 +190,16 @@
                         placeholder="••••••••" required>
                 </div>
 
+                <div class="flex items-center justify-between mt-2 mb-6">
+                    <div class="flex items-center">
+                        <input id="remember" name="remember" type="checkbox" 
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer">
+                        <label for="remember" class="ml-2 block text-xs font-semibold text-neutral-600 cursor-pointer">
+                            Ingat Saya
+                        </label>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn-login">P LOGIN</button>
             </form>
 

@@ -54,7 +54,7 @@ export const AppSidebar = ({ user, routes, csrfToken, canAdmin, currentRoute }: 
     <Sidebar open={open} setOpen={setOpen}>
       <SidebarBody className="justify-between gap-10 border-r border-neutral-200">
         <div className={cn("flex flex-col flex-1 overflow-y-auto overflow-x-hidden", !open && "items-center")}>
-          {!isMobile && (open ? <Logo /> : <LogoIcon />)}
+          {open ? <Logo /> : <LogoIcon />}
           
           <div className="mt-8 flex flex-col gap-1">
             

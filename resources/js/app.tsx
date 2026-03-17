@@ -2,14 +2,14 @@ import '../css/app.css';
 import './bootstrap';
 
 import { createRoot } from 'react-dom/client';
-import { IosDateTimePicker } from './Components/ui/ios-datetime-picker';
-import { ProjectDataTable } from './Components/ui/project-data-table';
-import { PremiumDataTable } from './Components/ui/premium-data-table';
-import { MasterUnitTable } from './Components/islands/MasterUnitTable';
-import { BreakdownLogTable } from './Components/islands/BreakdownLogTable';
-import { VendorTable } from './Components/islands/VendorTable';
-import { LatestReportsTable } from './Components/islands/LatestReportsTable';
-import { AppSidebar } from './Components/islands/AppSidebar';
+import { IosDateTimePicker } from './components/ui/ios-datetime-picker';
+import { ProjectDataTable } from './components/ui/project-data-table';
+import { PremiumDataTable } from './components/ui/premium-data-table';
+import { MasterUnitTable } from './components/islands/MasterUnitTable';
+import { BreakdownLogTable } from './components/islands/BreakdownLogTable';
+import { VendorTable } from './components/islands/VendorTable';
+import { LatestReportsTable } from './components/islands/LatestReportsTable';
+import { AppSidebar } from './components/islands/AppSidebar';
 
 // Mount all [data-react-component] islands declared in Blade templates
 const mountIslands = () => {
