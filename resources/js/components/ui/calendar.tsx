@@ -5,7 +5,7 @@ import * as React from "react";
 import { DayPicker } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/Components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -13,7 +13,7 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
-  components: userComponents,
+  components: usercomponents,
   ...props
 }: CalendarProps) {
   const defaultClassNames = {
@@ -61,7 +61,7 @@ function Calendar({
     {} as typeof defaultClassNames,
   );
 
-  const defaultComponents = {
+  const defaultcomponents = {
     Chevron: (props: any) => {
       if (props.orientation === "left") {
         return <ChevronLeft size={16} strokeWidth={2} {...props} aria-hidden="true" />;
@@ -70,9 +70,9 @@ function Calendar({
     },
   };
 
-  const mergedComponents = {
-    ...defaultComponents,
-    ...userComponents,
+  const mergedcomponents = {
+    ...defaultcomponents,
+    ...usercomponents,
   };
 
   return (
@@ -80,7 +80,7 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn("w-fit", className)}
       classNames={mergedClassNames}
-      components={mergedComponents}
+      components={mergedcomponents}
       {...props}
     />
   );

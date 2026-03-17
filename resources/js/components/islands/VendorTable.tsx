@@ -1,6 +1,6 @@
 import * as React from "react";
-import { PremiumDataTable, Column } from "@/Components/ui/premium-data-table";
-import { Button } from "@/Components/ui/button";
+import { PremiumDataTable, Column } from "@/components/ui/premium-data-table";
+import { Button } from "@/components/ui/button";
 import { Edit2, Trash2, Building2, Phone, FileText } from "lucide-react";
 
 interface Vendor {

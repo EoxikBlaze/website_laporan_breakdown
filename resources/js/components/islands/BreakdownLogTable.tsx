@@ -1,7 +1,7 @@
 import * as React from "react";
-import { PremiumDataTable, Column } from "@/Components/ui/premium-data-table";
-import { Badge } from "@/Components/ui/badge";
-import { Button } from "@/Components/ui/button";
+import { PremiumDataTable, Column } from "@/components/ui/premium-data-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Search, 
   Eye, 
