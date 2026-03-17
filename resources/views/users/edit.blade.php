@@ -41,6 +41,7 @@
                     <select id="role" name="role" required
                             class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none appearance-none bg-white">
                         <option value="super_admin" {{ old('role', $user->role) === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                        <option value="vendor_admin" {{ old('role', $user->role) === 'vendor_admin' ? 'selected' : '' }}>Admin Vendor</option>
                         <option value="operator" {{ old('role', $user->role) === 'operator' ? 'selected' : '' }}>Operator</option>
                     </select>
                     @error('role') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
@@ -96,7 +97,7 @@
 <script>
     document.getElementById('role').addEventListener('change', function() {
         const vendorContainer = document.getElementById('vendor-container');
-        if (this.value === 'operator') {
+        if (this.value === 'operator' || this.value === 'vendor_admin') {
             vendorContainer.style.display = 'block';
             document.getElementById('vendor_id').setAttribute('required', 'required');
         } else {

@@ -30,10 +30,15 @@ class User extends Authenticatable
         return $this->role === 'super_admin';
     }
 
-    /** Keep isAdmin() as alias for super_admin for backward compatibility. */
+    public function isVendorAdmin(): bool
+    {
+        return $this->role === 'vendor_admin';
+    }
+
+    /** isAdmin covers both super_admin and vendor_admin */
     public function isAdmin(): bool
     {
-        return $this->role === 'super_admin';
+        return in_array($this->role, ['super_admin', 'vendor_admin']);
     }
 
     public function isOperator(): bool

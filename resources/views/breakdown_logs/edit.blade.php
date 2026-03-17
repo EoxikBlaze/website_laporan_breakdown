@@ -73,6 +73,19 @@
                                       placeholder="Ceritakan detail kerusakan unit...">{{ old('keterangan', $breakdownLog->keterangan) }}</textarea>
                             @error('keterangan') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
+
+                        @if(auth()->user()->isSuperAdmin())
+                        <div class="space-y-2 border-t border-neutral-100 pt-4">
+                            <label for="user_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider italic">Reporter (Superadmin Only)</label>
+                            <select name="user_id" id="user_id" class="select2 w-full">
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}" {{ old('user_id', $breakdownLog->user_id) == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }} ({{ $user->role }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -112,8 +125,9 @@
                             @error('waktu_akhir_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
 
+@if(auth()->user()->isAdmin())
                         <div class="space-y-2 border-t border-neutral-100 pt-4">
-                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Status Sekarang</label>
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Status Laporan</label>
                             <div class="grid grid-cols-2 gap-2">
                                 <label class="cursor-pointer group">
                                     <input type="radio" name="status" value="Open" {{ old('status', $breakdownLog->status) == 'Open' ? 'checked' : '' }} class="peer hidden">
@@ -129,6 +143,7 @@
                                 </label>
                             </div>
                         </div>
+@endif
 
                         <div class="pt-4 flex flex-col gap-2">
                             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-[0.98]">

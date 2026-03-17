@@ -114,20 +114,6 @@
                             @error('waktu_akhir_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
 
-                        <div class="space-y-2">
-                            <label for="status" class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
-                                Status Akhir Laporan
-                            </label>
-                            <div class="relative">
-                                <select name="status" id="status" class="w-full h-10 rounded-lg border-neutral-300 bg-white text-sm font-medium focus:ring-primary/20 appearance-none pl-3 pr-10" required>
-                                    <option value="Open" {{ old('status') == 'Open' ? 'selected' : '' }}>Open (Sedang Proses)</option>
-                                    <option value="Closed" {{ old('status') == 'Closed' ? 'selected' : '' }}>Closed (Selesai)</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                    <i class="fas fa-chevron-down text-neutral-400 text-[10px]"></i>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -181,14 +167,6 @@
         $('#spare_unit_id').on('change', toggleSpareTime);
         toggleSpareTime(); // Run on load
 
-        // Automatic status closing when finish time is filled
-        $(document).on('change', 'input[name="waktu_akhir_bd"]', function() {
-            if ($(this).val()) {
-                $('#status').val('Closed');
-            } else {
-                $('#status').val('Open');
-            }
-        });
     });
 </script>
 @endpush

@@ -75,8 +75,9 @@ class BreakdownLogController extends Controller
             ->orWhere('id', $breakdownLog->spare_unit_id) // Allow keeping current spare unit
             ->get();
         $vendors = Vendor::all();
+        $users = \App\Models\User::all();
             
-        return view('breakdown_logs.edit', compact('breakdownLog', 'units', 'spareUnits', 'vendors'));
+        return view('breakdown_logs.edit', compact('breakdownLog', 'units', 'spareUnits', 'vendors', 'users'));
     }
 
     /**

@@ -180,8 +180,8 @@ export const AppSidebar = ({ user, routes, csrfToken, canAdmin, currentRoute }: 
             {open && (
                <div className="px-9 -mt-2 mb-2">
                  <p className="text-[10px] text-muted-foreground truncate">{user.email}</p>
-                 <p className="text-[9px] text-neutral-400 font-medium uppercase tracking-wide mt-0.5">
-                   {canAdmin ? 'Super Admin' : 'Operator'}
+                 <p>
+                   {user.role === 'super_admin' ? 'Super Admin' : (user.role === 'vendor_admin' ? 'Admin Vendor' : 'Operator')}
                  </p>
                </div>
             )}
