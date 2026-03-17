@@ -45,73 +45,72 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                    className="w-[92vw] sm:w-auto p-0 border border-neutral-200 shadow-2xl rounded-[28px] overflow-hidden bg-white mt-2" 
-                    align="start"
-                    sideOffset={8}
+                    className="w-[92vw] sm:w-auto p-0 border border-neutral-200 shadow-2xl rounded-[32px] overflow-hidden bg-white/95 backdrop-blur-md mt-2 max-h-[90vh] flex flex-col sm:max-h-none sm:flex-row sm:overflow-visible sm:bg-white" 
+                    align="center"
+                    sideOffset={12}
                 >
-                    <div className="flex flex-col">
-                        {/* Header: Unified and Premium */}
-                        <div className="px-6 py-5 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white shadow-md relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-                            <div className="relative z-10 flex items-center justify-between">
+                    <div className="flex flex-col h-full max-h-[85vh] sm:max-h-none">
+                        {/* Header: Fixed at top */}
+                        <div className="px-6 py-6 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white shadow-xl flex-shrink-0">
+                            <div className="flex items-center justify-between">
                                 <div className="flex flex-col">
-                                    <p className="text-[10px] uppercase tracking-[0.2em] font-black opacity-60 mb-1">Setel Waktu</p>
+                                    <p className="text-[10px] uppercase tracking-[0.25em] font-black opacity-60 mb-1">Pilih Waktu</p>
                                     <span className="text-base font-bold">
                                         {date ? format(date, "dd MMMM yyyy", { locale: id }) : "Pilih Tanggal"}
                                     </span>
                                 </div>
-                                <div className="px-4 py-2 bg-white/10 rounded-2xl text-lg font-black backdrop-blur-xl border border-white/20 shadow-inner">
+                                <div className="px-5 py-2.5 bg-white/10 rounded-2xl text-xl font-black backdrop-blur-2xl border border-white/20 shadow-inner">
                                     {date ? format(date, "HH:mm") : "--:--"}
                                 </div>
                             </div>
                         </div>
 
-                        {/* Content Area */}
-                        <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-neutral-100">
-                            {/* Left: Calendar - Reduced padding on mobile */}
-                            <div className="p-2 sm:p-5 bg-white">
-                                <Calendar
-                                    mode="single"
-                                    selected={date}
-                                    onSelect={(d) => d && setDate(prev => {
-                                        if (!prev) return d;
-                                        const newDate = new Date(d);
-                                        newDate.setHours(prev.getHours());
-                                        newDate.setMinutes(prev.getMinutes());
-                                        return newDate;
-                                    })}
-                                    locale={id}
-                                    className="p-1 sm:p-0"
-                                />
-                            </div>
+                        {/* Scrollable Body on Mobile */}
+                        <div className="flex-1 overflow-y-auto sm:overflow-visible">
+                            <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-neutral-100">
+                                {/* Left: Calendar */}
+                                <div className="p-3 sm:p-6 bg-white sm:bg-transparent flex justify-center">
+                                    <Calendar
+                                        mode="single"
+                                        selected={date}
+                                        onSelect={(d) => d && setDate(prev => {
+                                            if (!prev) return d;
+                                            const newDate = new Date(d);
+                                            newDate.setHours(prev.getHours());
+                                            newDate.setMinutes(prev.getMinutes());
+                                            return newDate;
+                                        })}
+                                        locale={id}
+                                        className="p-1 sm:p-0"
+                                    />
+                                </div>
 
-                            {/* Right: Time & Action - Unified background on mobile */}
-                            <div className="px-6 py-6 sm:w-[260px] bg-white sm:bg-neutral-50/30 flex flex-col justify-between border-t sm:border-t-0 border-neutral-50">
-                                <div className="space-y-6">
-                                    <div className="flex items-center gap-2.5">
-                                        <div className="p-2 bg-blue-50 rounded-xl text-blue-600 shadow-sm border border-blue-100/50">
-                                            <Clock size={16} />
+                                {/* Right: Time & Action */}
+                                <div className="px-8 py-8 sm:w-[280px] bg-neutral-50/20 sm:bg-neutral-50/40 flex flex-col justify-between">
+                                    <div className="space-y-8">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2.5 bg-blue-100 rounded-2xl text-blue-600 shadow-sm border border-blue-200/50">
+                                                <Clock size={18} />
+                                            </div>
+                                            <span className="text-[12px] font-black text-neutral-400 uppercase tracking-widest">Waktu Presisi</span>
                                         </div>
-                                        <span className="text-[11px] font-black text-neutral-400 uppercase tracking-widest">Waktu Presisi</span>
+                                        
+                                        <div className="flex justify-center sm:justify-start scale-125 sm:scale-100 origin-center sm:origin-left py-6 sm:py-2">
+                                            <TimePicker 
+                                                value={date} 
+                                                onChange={handleTimeChange} 
+                                            />
+                                        </div>
                                     </div>
                                     
-                                    <div className="flex justify-center sm:justify-start scale-110 sm:scale-100 origin-center sm:origin-left py-4 sm:py-2">
-                                        <TimePicker 
-                                            value={date} 
-                                            onChange={handleTimeChange} 
-                                        />
-                                    </div>
+                                    <Button 
+                                        className="w-full mt-12 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-2xl h-14 shadow-2xl shadow-blue-600/30 font-black transition-all active:scale-[0.95] text-sm tracking-widest gap-3 group"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        <span>KONFIRMASI</span>
+                                        <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                                    </Button>
                                 </div>
-                                
-                                <Button 
-                                    className="w-full mt-10 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-2xl h-12 shadow-xl shadow-blue-600/20 font-black transition-all active:scale-[0.96] text-sm tracking-wide gap-2 group"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    <span>Konfirmasi Waktu</span>
-                                    <div className="w-5 h-5 bg-white/20 rounded-lg flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                                    </div>
-                                </Button>
                             </div>
                         </div>
                     </div>
