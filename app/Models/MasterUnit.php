@@ -27,6 +27,17 @@ class MasterUnit extends Model
                 $builder->where('vendor_id', auth()->user()->vendor_id);
             }
         });
+
+        static::saving(function ($unit) {
+            if (is_null($unit->vendor_id)) {
+                $prefix = strtoupper(substr($unit->nomor_lambung, 0, 4));
+                if ($prefix === 'ARBI') {
+                    $unit->vendor_id = 5; // CV BINA INTI PERSADA
+                } elseif ($prefix === 'ARJH') {
+                    $unit->vendor_id = 4; // PT Jejak Hasanah
+                }
+            }
+        });
     }
 
     /**
