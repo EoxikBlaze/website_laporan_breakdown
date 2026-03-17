@@ -14,7 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Admin Super Admin
+        // 1. Seed Vendors FIRST so they exist for user foreign keys
+        $this->call(VendorSeeder::class);
+
+        // 2. Admin Super Admin
         User::updateOrCreate(
             ['email' => 'admin@gsportalaria.up.railway.app'],
             [
@@ -24,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. PAMA Super Admin
+        // 3. PAMA Super Admin
         User::updateOrCreate(
             ['email' => 'pama@gsportalaria.up.railway.app'],
             [
@@ -34,27 +37,32 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 3. User CV Bina (Vendor Admin)
-        User::updateOrCreate(
-            ['email' => 'cv.bina@gsportalaria.up.railway.app'],
-            [
-                'name' => 'Admin CV Bina',
-                'password' => Hash::make('persada123789'),
-                'role' => 'vendor_admin',
-                'vendor_id' => 5,
-            ]
-        );
+        // 4. Dynamic Vendor Admin Lookup
+        $vendorBina = \App\Models\Vendor::where('nama_vendor', 'CV. BINA INTI PERSADA')->first();
+        if ($vendorBina) {
+            User::updateOrCreate(
+                ['email' => 'cv.bina@gsportalaria.up.railway.app'],
+                [
+                    'name' => 'Admin CV Bina',
+                    'password' => Hash::make('persada123789'),
+                    'role' => 'vendor_admin',
+                    'vendor_id' => $vendorBina->id,
+                ]
+            );
+        }
 
-        // 4. User PT Jejak (Vendor Admin)
-        User::updateOrCreate(
-            ['email' => 'pt.jejak@gsportalaria.up.railway.app'],
-            [
-                'name' => 'Admin PT Jejak',
-                'password' => Hash::make('persada123789'),
-                'role' => 'vendor_admin',
-                'vendor_id' => 4,
-            ]
-        );
+        $vendorJejak = \App\Models\Vendor::where('nama_vendor', 'PT. Jejak Hasanah')->first();
+        if ($vendorJejak) {
+            User::updateOrCreate(
+                ['email' => 'pt.jejak@gsportalaria.up.railway.app'],
+                [
+                    'name' => 'Admin PT Jejak',
+                    'password' => Hash::make('persada123789'),
+                    'role' => 'vendor_admin',
+                    'vendor_id' => $vendorJejak->id,
+                ]
+            );
+        }
 
         // 5. General Operator
         User::updateOrCreate(
@@ -66,10 +74,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Seed Vendors
-        $this->call(VendorSeeder::class);
-
-        // Seed Master Units
+        // 6. Seed Master Units
         $this->call(MasterUnitSeeder::class);
     }
 }
