@@ -121,52 +121,51 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
         <div className="w-full">
             <input type="hidden" name={name} value={formattedValue} />
             
-            <Button
-                variant={"outline"}
-                type="button"
-                onClick={() => setIsOpen(true)}
-                className={cn(
-                    "w-full justify-start text-left font-medium h-12 px-4 border-neutral-200 rounded-xl bg-white hover:bg-neutral-50 hover:border-blue-300 transition-all duration-200 shadow-sm",
-                    !date && "text-neutral-400"
+            <Popover open={!isMobile && isOpen} onOpenChange={setIsOpen}>
+                <PopoverTrigger asChild>
+                    <Button
+                        variant={"outline"}
+                        type="button"
+                        onClick={() => isMobile && setIsOpen(true)}
+                        className={cn(
+                            "w-full justify-start text-left font-medium h-12 px-4 border-neutral-200 rounded-xl bg-white hover:bg-neutral-50 hover:border-blue-300 transition-all duration-200 shadow-sm",
+                            !date && "text-neutral-400"
+                        )}
+                    >
+                        <CalendarIcon className="mr-3 h-4 w-4 text-blue-500" />
+                        <span className="flex-1 text-sm">{displayValue}</span>
+                    </Button>
+                </PopoverTrigger>
+                {!isMobile && (
+                    <PopoverContent 
+                        className="w-auto p-0 border border-neutral-200 shadow-2xl rounded-[32px] overflow-hidden bg-white mt-2" 
+                        align="center"
+                        sideOffset={12}
+                    >
+                        <PickerContent />
+                    </PopoverContent>
                 )}
-            >
-                <CalendarIcon className="mr-3 h-4 w-4 text-blue-500" />
-                <span className="flex-1 text-sm">{displayValue}</span>
-            </Button>
+            </Popover>
 
             <AnimatePresence>
-                {isOpen && (
-                    <>
-                        {isMobile ? (
-                            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                                <motion.div 
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    onClick={() => setIsOpen(false)}
-                                    className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-                                />
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                                    className="relative z-10 w-full max-w-sm bg-white rounded-[32px] overflow-hidden shadow-2xl"
-                                >
-                                    <PickerContent mobile />
-                                </motion.div>
-                            </div>
-                        ) : (
-                            <Popover open={isOpen} onOpenChange={setIsOpen}>
-                                <PopoverContent 
-                                    className="w-auto p-0 border border-neutral-200 shadow-2xl rounded-[32px] overflow-hidden bg-white mt-2" 
-                                    align="center"
-                                    sideOffset={12}
-                                >
-                                    <PickerContent />
-                                </PopoverContent>
-                            </Popover>
-                        )}
-                    </>
+                {isMobile && isOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsOpen(false)}
+                            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative z-10 w-full max-w-sm bg-white rounded-[32px] overflow-hidden shadow-2xl"
+                        >
+                            <PickerContent mobile />
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
         </div>
