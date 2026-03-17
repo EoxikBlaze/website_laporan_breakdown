@@ -45,28 +45,31 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                    className="w-[94vw] sm:w-auto p-0 border border-neutral-200 shadow-2xl rounded-[24px] overflow-hidden bg-white mt-2" 
+                    className="w-[92vw] sm:w-auto p-0 border border-neutral-200 shadow-2xl rounded-[28px] overflow-hidden bg-white mt-2" 
                     align="start"
-                    sideOffset={5}
+                    sideOffset={8}
                 >
                     <div className="flex flex-col">
-                        {/* Selected Time Display - Compact on mobile */}
-                        <div className="px-5 py-4 sm:px-6 sm:py-5 bg-gradient-to-br from-blue-700 to-blue-900 text-white shadow-lg">
-                            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-black opacity-70 mb-1.5">Konfigurasi Waktu</p>
-                            <div className="flex items-center justify-between gap-4">
-                                <span className="text-sm sm:text-base font-bold truncate">
-                                    {date ? format(date, "dd MMMM yyyy", { locale: id }) : "Pilih Tanggal"}
-                                </span>
-                                <div className="px-3 py-1.5 bg-white/20 rounded-xl text-xs sm:text-sm font-black backdrop-blur-md border border-white/10 shrink-0">
+                        {/* Header: Unified and Premium */}
+                        <div className="px-6 py-5 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white shadow-md relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                            <div className="relative z-10 flex items-center justify-between">
+                                <div className="flex flex-col">
+                                    <p className="text-[10px] uppercase tracking-[0.2em] font-black opacity-60 mb-1">Setel Waktu</p>
+                                    <span className="text-base font-bold">
+                                        {date ? format(date, "dd MMMM yyyy", { locale: id }) : "Pilih Tanggal"}
+                                    </span>
+                                </div>
+                                <div className="px-4 py-2 bg-white/10 rounded-2xl text-lg font-black backdrop-blur-xl border border-white/20 shadow-inner">
                                     {date ? format(date, "HH:mm") : "--:--"}
                                 </div>
                             </div>
                         </div>
 
-                        {/* Interactive Area - Side-by-side on sm+ */}
-                        <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-neutral-100 overflow-y-auto max-h-[70vh] sm:max-h-none">
-                            {/* Left: Calendar */}
-                            <div className="p-1 sm:p-4 bg-white">
+                        {/* Content Area */}
+                        <div className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-neutral-100">
+                            {/* Left: Calendar - Reduced padding on mobile */}
+                            <div className="p-2 sm:p-5 bg-white">
                                 <Calendar
                                     mode="single"
                                     selected={date}
@@ -78,21 +81,21 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                                         return newDate;
                                     })}
                                     locale={id}
-                                    className="p-2 sm:p-1"
+                                    className="p-1 sm:p-0"
                                 />
                             </div>
 
-                            {/* Right: Clock & Action */}
-                            <div className="px-6 py-6 sm:w-[240px] bg-neutral-50/50 flex flex-col justify-between">
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <div className="p-1.5 bg-blue-100 rounded-lg text-blue-600">
-                                            <Clock size={14} />
+                            {/* Right: Time & Action - Unified background on mobile */}
+                            <div className="px-6 py-6 sm:w-[260px] bg-white sm:bg-neutral-50/30 flex flex-col justify-between border-t sm:border-t-0 border-neutral-50">
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-2 bg-blue-50 rounded-xl text-blue-600 shadow-sm border border-blue-100/50">
+                                            <Clock size={16} />
                                         </div>
-                                        <span className="text-[10px] sm:text-[11px] font-bold text-neutral-500 uppercase tracking-wider">Setel Jam</span>
+                                        <span className="text-[11px] font-black text-neutral-400 uppercase tracking-widest">Waktu Presisi</span>
                                     </div>
                                     
-                                    <div className="flex justify-center sm:justify-start scale-95 sm:scale-100 origin-center sm:origin-left py-2">
+                                    <div className="flex justify-center sm:justify-start scale-110 sm:scale-100 origin-center sm:origin-left py-4 sm:py-2">
                                         <TimePicker 
                                             value={date} 
                                             onChange={handleTimeChange} 
@@ -101,10 +104,13 @@ export function IosDateTimePicker({ name, initialValue, label }: IosDateTimePick
                                 </div>
                                 
                                 <Button 
-                                    className="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 sm:h-12 shadow-lg shadow-blue-500/20 font-bold transition-all active:scale-[0.98] text-sm"
+                                    className="w-full mt-10 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-2xl h-12 shadow-xl shadow-blue-600/20 font-black transition-all active:scale-[0.96] text-sm tracking-wide gap-2 group"
                                     onClick={() => setIsOpen(false)}
                                 >
-                                    Konfirmasi
+                                    <span>Konfirmasi Waktu</span>
+                                    <div className="w-5 h-5 bg-white/20 rounded-lg flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                                    </div>
                                 </Button>
                             </div>
                         </div>
