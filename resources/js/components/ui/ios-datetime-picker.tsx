@@ -137,7 +137,7 @@ export function IosDateTimePicker({ name, initialValue, label, id: idProp }: Ios
     );
 
     return (
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex items-center gap-2">
             <input type="hidden" name={name} value={formattedValue} />
             
             <Popover open={!isMobile && isOpen} onOpenChange={setIsOpen}>
@@ -148,7 +148,7 @@ export function IosDateTimePicker({ name, initialValue, label, id: idProp }: Ios
                         type="button"
                         onClick={() => isMobile && setIsOpen(true)}
                         className={cn(
-                            "w-full justify-start text-left font-medium h-12 px-4 border-neutral-200 rounded-xl bg-white hover:bg-neutral-50 hover:border-blue-300 transition-all duration-200 shadow-sm",
+                            "flex-1 justify-start text-left font-medium h-12 px-4 border-neutral-200 rounded-xl bg-white hover:bg-neutral-50 hover:border-blue-300 transition-all duration-200 shadow-sm",
                             !date && "text-neutral-400"
                         )}
                     >
@@ -171,11 +171,11 @@ export function IosDateTimePicker({ name, initialValue, label, id: idProp }: Ios
             {date && (
                 <button
                     type="button"
-                    onClick={() => setDate(undefined)}
-                    className="w-full py-2.5 px-4 rounded-xl border border-rose-200 text-rose-600 bg-rose-50 hover:bg-rose-100 text-xs font-bold transition-all shadow-sm active:scale-[0.98] flex items-center justify-center gap-2"
+                    onClick={(e) => { e.preventDefault(); setDate(undefined); }}
+                    title="Clear Waktu Selesai (Set OPEN)"
+                    className="flex-shrink-0 w-12 h-12 rounded-xl border border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-all shadow-sm active:scale-[0.95]"
                 >
-                    <svg className="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                    Clear Selesai (Set ke OPEN)
+                    <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                 </button>
             )}
 
