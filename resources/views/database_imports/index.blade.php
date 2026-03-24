@@ -32,13 +32,18 @@
                         <!-- Target Table Selection -->
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Pilih Tabel Tujuan</label>
-                            <select name="target_table" required class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer">
+                            <select name="target_table" id="target_table" required class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer">
                                 <option value="" disabled selected>-- Pilih Tabel Output --</option>
                                 <option value="breakdowns">Laporan Breakdown</option>
                                 <option value="units">Data Master Unit</option>
                                 <option value="users">Data Akses User</option>
                                 <option value="vendors">Data Profil Vendor</option>
                             </select>
+                            <div class="mt-2 text-right opacity-0 transition-opacity duration-300" id="template_container">
+                                <a id="download_template_btn" href="#" class="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1.5 justify-end w-fit ml-auto bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200">
+                                    <i class="fas fa-file-excel"></i> Download Template Kosong
+                                </a>
+                            </div>
                         </div>
 
                         <!-- File Upload -->
@@ -59,4 +64,26 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const select = document.getElementById('target_table');
+        const container = document.getElementById('template_container');
+        const btn = document.getElementById('download_template_btn');
+        
+        select.addEventListener('change', function() {
+            const type = this.value;
+            if (type) {
+                btn.href = `{{ url('database_imports/template') }}/${type}`;
+                container.classList.remove('opacity-0');
+                container.classList.add('opacity-100');
+            } else {
+                container.classList.add('opacity-0');
+                container.classList.remove('opacity-100');
+            }
+        });
+    });
+</script>
+@endpush
 @endsection

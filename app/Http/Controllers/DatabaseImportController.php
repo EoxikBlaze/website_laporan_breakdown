@@ -23,6 +23,20 @@ class DatabaseImportController extends Controller
     }
 
     /**
+     * Download the specific blank Excel template.
+     */
+    public function downloadTemplate($type)
+    {
+        Gate::authorize('manage-users');
+
+        if (!in_array($type, ['breakdowns', 'units', 'users', 'vendors'])) {
+            abort(404);
+        }
+
+        return Excel::download(new \App\Exports\DatabaseTemplateExport($type), "Template_Import_{$type}.xlsx");
+    }
+
+    /**
      * Handle the incoming Excel payload and map to the specific parser.
      */
     public function store(Request $request)

@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', UserController::class);
     
     // Universal Database Import (super_admin only)
+    Route::get('database_imports/template/{type}', [DatabaseImportController::class, 'downloadTemplate'])->name('database_imports.template');
     Route::resource('database_imports', DatabaseImportController::class)->only(['index', 'store']);
 });
 
