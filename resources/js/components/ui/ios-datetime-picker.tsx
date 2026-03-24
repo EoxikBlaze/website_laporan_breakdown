@@ -112,6 +112,7 @@ export function IosDateTimePicker({ name, initialValue, label, id: idProp }: Ios
                         </div>
                         
                         <Button 
+                            type="button"
                             className="w-full mt-12 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-2xl h-14 shadow-2xl shadow-blue-600/30 font-black transition-all active:scale-[0.95] text-sm tracking-widest gap-3 group"
                             onClick={() => setIsOpen(false)}
                         >
