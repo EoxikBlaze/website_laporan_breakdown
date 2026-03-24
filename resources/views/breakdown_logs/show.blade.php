@@ -66,12 +66,14 @@
             </div>
 
             <!-- 4. Lama Unit BD -->
+            @if($breakdownLog->spare_unit_id)
             <div class="p-6">
                 <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Lama Unit BD</p>
                 <div class="flex items-baseline gap-1">
                     <span class="text-xl font-black text-indigo-600 truncate" title="{{ $breakdownLog->lama_unit_breakdown ?? 'Berlangsung' }}">{{ $breakdownLog->lama_unit_breakdown ?? 'Berlangsung' }}</span>
                 </div>
             </div>
+            @endif
 
             <!-- 5. Daily Impact -->
             <div class="p-6">
@@ -208,15 +210,7 @@
                 </div>
             </div>
 
-            <!-- Additional Guidelines -->
-            <div class="bg-blue-600 rounded-2xl p-6 text-white shadow-xl shadow-blue-600/20">
-                <p class="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 mb-2">Panduan Penggunaan</p>
-                <ul class="text-xs font-medium opacity-80 space-y-2 list-disc list-inside">
-                    <li><b>Total Loss Time</b>: Produksi terpotong (Mulai Breakdown hingga Unit Pengganti Datang atau RFU).</li>
-                    <li><b>Lama Unit BD</b>: Waktu yang diakumulasikan khusus untuk reparasi alat (Mulai Breakdown hingga Selesai / RFU).</li>
-                </ul>
-            </div>
-        </div>
+
     </div>
 </div>
 @endsection

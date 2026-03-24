@@ -190,7 +190,8 @@
         }
 
         function toggleSpareTime() {
-            if ($('#spare_unit_id').val()) {
+            // Because React mounts asynchronously, use the name attribute to reliably locate the input
+            if ($('input[name="spare_unit_id"]').val()) {
                 $('#spare-time-container').slideDown();
             } else {
                 $('#spare-time-container').slideUp();
@@ -199,8 +200,11 @@
             }
         }
 
-        $('#spare_unit_id').on('change', toggleSpareTime);
-        toggleSpareTime(); // Run on load
+        // Use event delegation for React-rendered DOM inputs
+        $(document).on('change', 'input[name="spare_unit_id"]', toggleSpareTime);
+        
+        // Use timeout to wait for React hydration before initial check
+        setTimeout(toggleSpareTime, 300);
     });
 </script>
 @endpush

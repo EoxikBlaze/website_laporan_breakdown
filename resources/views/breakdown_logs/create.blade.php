@@ -153,15 +153,17 @@
     $(document).ready(function() {
         // Conditional visibility for spare arrival time
         function toggleSpareTime() {
-            if ($('#spare_unit_id').val()) {
+            if ($('input[name="spare_unit_id"]').val()) {
                 $('#spare-time-container').slideDown();
             } else {
                 $('#spare-time-container').slideUp();
             }
         }
 
-        $('#spare_unit_id').on('change', toggleSpareTime);
-        toggleSpareTime(); // Run on load
+        $(document).on('change', 'input[name="spare_unit_id"]', toggleSpareTime);
+        
+        // Wait for React hydration
+        setTimeout(toggleSpareTime, 300);
 
     });
 </script>
