@@ -26,7 +26,7 @@ class DatabaseTemplateExport implements FromArray, WithTitle, ShouldAutoSize, Wi
                 return [
                     ['TEMPLATE IMPORT LAPORAN BREAKDOWN (JANGAN UBAH SUSUNAN KOLOM)', '', '', '', '', '', '', '', '', '', '', ''],
                     ['No', 'Vendor', 'Unit', 'Keterangan', 'Waktu Awal', 'Waktu Akhir', 'Spare Unit', 'Jam Datang', 'Loss Time', '%', 'Status', 'Lama Unit BD'],
-                    ['(Abaikan)', '(Wajib Valid)', '(Wajib Valid)', '(Bebas)', '(Format: 24 Mar 2026 14.00)', '(- jika belum)', '(- jika tidak ada)', '(-)', '(Otomatis)', '(Otomatis)', '(Otomatis)', '(Otomatis)'],
+                    ['(Abaikan)', '(Opsi)', '(Wajib Valid)', '(Bebas)', '(Format: 24 Mar 2026 14.00)', '(- jika belum)', '(- jika tidak ada)', '(-)', '(Otomatis)', '(Otomatis)', '(Otomatis)', '(Otomatis)'],
                     ['1', 'CV BINA S', 'ARPM-103', 'Contoh Keterangan Ban Bocor', '24 Mar 2026 08.00', '25 Mar 2026 12.00', 'ARPM-001', '-', '-', '-', '-', '-']
                 ];
             case 'units': // Starts reading at row 3

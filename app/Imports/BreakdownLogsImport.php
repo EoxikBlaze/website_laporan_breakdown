@@ -49,13 +49,9 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
                 continue; // Skip silently if core identifiers are blank
             }
 
-            // Bind explicitly to Vendor
+            // Bind explicitly to Vendor (Defaults to null if missing or invalid, no longer rejects)
             $vendor = Vendor::where('nama_vendor', $vendorName)->first();
-            if (!$vendor) {
-                $this->skippedCount++;
-                $this->skippedReasons[] = "Vendor tidak valid: $vendorName";
-                continue; // Aggressive validation: reject row if vendor is missing/invalid name
-            }
+            $vendorId = $vendor ? $vendor->id : null;
 
             // Bind master unit forcefully
             $unit = MasterUnit::where('nomor_lambung', $unitNomor)->first();
@@ -108,7 +104,7 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
 
                 BreakdownLog::create([
                     'unit_id' => $unit->id,
-                    'vendor_id' => $vendor->id, 
+                    'vendor_id' => $vendorId, 
                     'user_id' => auth()->id() ?? 1,
                     'waktu_awal_bd' => $waktuAwal,
                     'waktu_akhir_bd' => $waktuAkhir,

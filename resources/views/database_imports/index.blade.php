@@ -20,14 +20,6 @@
             <form action="{{ route('database_imports.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="p-6 md:p-8 bg-neutral-50/50">
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-6 flex gap-3 text-blue-800 text-sm">
-                        <i class="fas fa-shield-alt mt-0.5 text-blue-500 text-lg"></i>
-                        <div>
-                            <p class="font-bold mb-1 tracking-tight text-base">Aturan Wajib Validasi Vendor</p>
-                            <p class="opacity-80 leading-relaxed">Sistem dilengkapi proteksi ketat. Setiap baris data dalam Excel <b>wajib</b> memuat ejaan nama Vendor yang sudah terdaftar resmi di sistem. Jika nama vendor tidak ditemukan atau dikosongkan, baris tersebut akan otomatis digagalkan/dibuang demi mencegah data siluman.</p>
-                        </div>
-                    </div>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Target Table Selection -->
                         <div class="space-y-2">

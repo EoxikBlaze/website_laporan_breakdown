@@ -26,16 +26,14 @@ class MasterUnitsImport implements ToCollection, WithStartRow
             }
 
             $vendor = Vendor::where('nama_vendor', $vendorName)->first();
-            if (!$vendor) {
-                continue; // Fails row if vendor is completely invalid string
-            }
+            $vendorId = $vendor ? $vendor->id : null;
 
             // Sync into database
             MasterUnit::updateOrCreate(
                 ['nomor_lambung' => $nomorLambung], // Match exact
                 [
                     'jenis_unit' => trim((string)($row[3] ?? '-')),
-                    'vendor_id'  => $vendor->id,
+                    'vendor_id'  => $vendorId,
                 ]
             );
         }
