@@ -18,10 +18,11 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export function IosDateTimePicker({ name, initialValue, label, id: idProp }: IosDateTimePickerProps & { id?: string }) {
     const [date, setDate] = React.useState<Date | undefined>(() => {
-        if (initialValue) return new Date(initialValue);
-        const d = new Date();
-        d.setHours(0, 0, 0, 0);
-        return d;
+        if (initialValue) {
+            const parsed = new Date(initialValue);
+            if (!isNaN(parsed.getTime())) return parsed;
+        }
+        return undefined;
     });
     const [isOpen, setIsOpen] = React.useState(false);
     const [isMobile, setIsMobile] = React.useState(false);
