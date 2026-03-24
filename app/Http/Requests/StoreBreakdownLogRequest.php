@@ -31,6 +31,7 @@ class StoreBreakdownLogRequest extends FormRequest
             'vendor_id' => ['nullable', 'exists:vendors,id'],
             'waktu_awal_bd' => ['required', 'date'],
             'waktu_akhir_bd' => ['nullable', 'date', 'after:waktu_awal_bd'], // waktu_akhir_bd > waktu_awal_bd
+            'waktu_spare_datang' => ['nullable', 'date', 'after_or_equal:waktu_awal_bd'],
             'status' => ['nullable', 'in:Open,Closed'],
             'keterangan' => ['nullable', 'string'],
         ];

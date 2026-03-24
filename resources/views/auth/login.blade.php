@@ -168,9 +168,9 @@
                 <p>Masuk</p>
             </div>
 
-            @if($errors->any())
-            <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:0.75rem 1rem;margin-bottom:1.25rem;font-size:0.8125rem;color:#dc2626;">
-                {{ $errors->first() }}
+            @if($errors->any() || session('error'))
+            <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:0.75rem 1rem;margin-bottom:1.25rem;font-size:0.8125rem;color:#dc2626;line-height:1.4;">
+                {{ session('error') ?? $errors->first() }}
             </div>
             @endif
 
