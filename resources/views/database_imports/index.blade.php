@@ -59,22 +59,32 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const select = document.getElementById('target_table');
-        const container = document.getElementById('template_container');
-        const btn = document.getElementById('download_template_btn');
+    $(document).ready(function() {
+        const $select = $('#target_table');
+        const $container = $('#template_container');
+        const $btn = $('#download_template_btn');
         
-        select.addEventListener('change', function() {
-            const type = this.value;
+        $select.on('change', function() {
+            const type = $(this).val();
             if (type) {
-                btn.href = `{{ url('database_imports/template') }}/${type}`;
-                container.classList.remove('opacity-0');
-                container.classList.add('opacity-100');
+                // Dynamically build URL and fade in
+                $btn.attr('href', `{{ url('database_imports/template') }}/${type}`);
+                $container.removeClass('opacity-0 pointer-events-none fade-out').addClass('opacity-100');
+                
+                // Also trigger click on the hyperlink if user clicks download
+                $btn.off('click').on('click', function(e) {
+                    // Bypass the global loading overlay specifically for this download
+                    $('#global-loader').addClass('opacity-0 pointer-events-none').removeClass('opacity-100');
+                });
             } else {
-                container.classList.add('opacity-0');
-                container.classList.remove('opacity-100');
+                $container.removeClass('opacity-100').addClass('opacity-0 pointer-events-none');
             }
         });
+        
+        // Trigger once on load in case browser pre-filled
+        if ($select.val()) {
+            $select.trigger('change');
+        }
     });
 </script>
 @endpush
