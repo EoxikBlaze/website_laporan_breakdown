@@ -38,27 +38,6 @@ class StoreBreakdownLogRequest extends FormRequest
     }
 
     /**
-     * Custom validation for business logic: spare_unit_id status must be 'Ready'.
-     */
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            $spareUnitId = $this->input('spare_unit_id');
-
-            if ($spareUnitId) {
-                $spareUnit = MasterUnit::find($spareUnitId);
-
-                if ($spareUnit && $spareUnit->status_operasional !== 'Ready') {
-                    $validator->errors()->add(
-                        'spare_unit_id',
-                        "Unit pengganti (spare) tidak dapat digunakan karena statusnya adalah '{$spareUnit->status_operasional}'. Hanya unit dengan status 'Ready' yang diperbolehkan."
-                    );
-                }
-            }
-        });
-    }
-
-    /**
      * Custom messages for clarity.
      */
     public function messages(): array

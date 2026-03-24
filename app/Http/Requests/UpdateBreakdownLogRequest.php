@@ -31,27 +31,6 @@ class UpdateBreakdownLogRequest extends FormRequest
         ];
     }
 
-    public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator) {
-            $spareUnitId = $this->input('spare_unit_id');
-            $breakdownLog = $this->route('breakdown_log');
-
-            if ($spareUnitId) {
-                // If the spare unit is being changed to a different one, check if the new one is Ready
-                // Or if it's the same one currently assigned, it's fine (as it might already be 'In Use' because of THIS log)
-                if ($breakdownLog && $breakdownLog->spare_unit_id != $spareUnitId) {
-                    $spareUnit = MasterUnit::find($spareUnitId);
-                    if ($spareUnit && $spareUnit->status_operasional !== 'Ready') {
-                        $validator->errors()->add(
-                            'spare_unit_id',
-                            "Unit pengganti baru tidak dapat digunakan karena statusnya adalah '{$spareUnit->status_operasional}'."
-                        );
-                    }
-                }
-            }
-        });
-    }
 
     public function messages(): array
     {
