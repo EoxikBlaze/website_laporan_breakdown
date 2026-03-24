@@ -28,8 +28,7 @@ class MasterUnitSeeder extends Seeder
             MasterUnit::updateOrCreate(
                 ['nomor_lambung' => $nomor],
                 [
-                    'jenis_unit' => '-',
-                    'status_operasional' => 'Ready'
+                    'jenis_unit' => '-'
                 ]
             );
         }
