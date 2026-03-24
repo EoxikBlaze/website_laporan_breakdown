@@ -50,10 +50,18 @@ class BreakdownLog extends Model
             }
 
             // 3. Auto-status based on waktu_akhir_bd
-            if ($log->waktu_akhir_bd) {
-                $log->status = 'Closed';
+            if (!$log->exists) {
+                // When creating, always auto-calculate since there's no manual status field
+                $log->status = $log->waktu_akhir_bd ? 'Closed' : 'Open';
             } else {
-                $log->status = 'Open';
+                // When updating:
+                // Admins have manual status radio buttons on the edit form. We trust their input.
+                // Operators don't have those buttons, so we force auto-calculation for them.
+                if (!auth()->check() || (!auth()->user()->isSuperAdmin() && !auth()->user()->isVendorAdmin())) {
+                    $log->status = $log->waktu_akhir_bd ? 'Closed' : 'Open';
+                } elseif (!$log->status) {
+                    $log->status = $log->waktu_akhir_bd ? 'Closed' : 'Open';
+                }
             }
         });
     }
