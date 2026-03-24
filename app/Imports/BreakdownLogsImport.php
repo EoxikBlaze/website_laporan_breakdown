@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 class BreakdownLogsImport implements ToCollection, WithStartRow
 {
     public $importedCount = 0;
+    public $duplicateCount = 0;
     public $skippedCount = 0;
     public $skippedReasons = [];
 
@@ -97,8 +98,7 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
                     ->first();
                 
                 if ($existingLog) {
-                    $this->skippedCount++;
-                    $this->skippedReasons[] = "Duplikat data ditemukan: $unitNomor pada $waktuAwalStr";
+                    $this->duplicateCount++;
                     continue;
                 }
 

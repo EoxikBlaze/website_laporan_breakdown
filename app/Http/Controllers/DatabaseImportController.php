@@ -58,10 +58,13 @@ class DatabaseImportController extends Controller
                     
                     if ($import->importedCount === 0 && $import->skippedCount > 0) {
                         $reasonDump = implode(", ", array_unique(array_slice($import->skippedReasons, 0, 3)));
-                        return back()->with('error', "Import dibatalkan otomatis. {$import->skippedCount} baris terdeteksi cacat/duplikat dan dilewati. Alasan: " . $reasonDump);
+                        return back()->with('error', "Import dibatalkan otomatis. {$import->skippedCount} baris terdeteksi cacat dan dilewati. Alasan: " . $reasonDump);
                     }
 
-                    $successMessage = "Berhasil masuk: {$import->importedCount} laporan baru. Dilewati: {$import->skippedCount} baris (Duplikat/Invalid).";
+                    $successMessage = "Berhasil masuk: {$import->importedCount} laporan baru.";
+                    if ($import->duplicateCount > 0) $successMessage .= " Dilewati: {$import->duplicateCount} data duplikat aman diabaikan.";
+                    if ($import->skippedCount > 0) $successMessage .= " Dilewati: {$import->skippedCount} baris invalid.";
+                    
                     break;
                 case 'units':
                     Excel::import(new MasterUnitsImport, $file);
