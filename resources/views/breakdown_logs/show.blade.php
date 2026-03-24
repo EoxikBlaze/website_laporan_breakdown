@@ -31,41 +31,65 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-neutral-100 bg-neutral-50/50">
-            <div class="p-6">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 divide-y lg:divide-y-0 lg:divide-x divide-neutral-100 bg-neutral-50/50">
+            <!-- 1. Status -->
+            <div class="p-6 col-span-2 md:col-span-1 border-b md:border-b-0">
                 <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Status Laporan</p>
                 @if($breakdownLog->status == 'Open')
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-100">
                         <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-                        <span class="text-xs font-black uppercase">Open Pulse</span>
+                        <span class="text-xs font-black uppercase">Open</span>
                     </div>
                 @else
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                        <span class="text-xs font-black uppercase">Resolved</span>
+                        <span class="text-xs font-black uppercase">Closed</span>
                     </div>
                 @endif
             </div>
-            <div class="p-6">
-                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Total Loss Time</p>
-                <div class="flex items-baseline gap-1">
-                    <span class="text-xl font-black text-rose-600">{{ $breakdownLog->loss_time ?? '0 Menit' }}</span>
-                </div>
-            </div>
+
+            <!-- 2. Mulai BD -->
             <div class="p-6">
                 <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Mulai Breakdown</p>
                 <div class="flex flex-col gap-0.5">
-                    <span class="text-sm font-bold text-neutral-800">{{ \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('d F Y') }}</span>
+                    <span class="text-sm font-bold text-neutral-800">{{ \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('d M Y') }}</span>
                     <span class="text-xs font-semibold text-rose-500">{{ \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('H:i') }} WIB</span>
                 </div>
             </div>
+
+            <!-- 3. Total Loss Time -->
+            <div class="p-6">
+                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Total Loss Time</p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-xl font-black text-rose-600 truncate" title="{{ $breakdownLog->loss_time ?? '0 Menit' }}">{{ $breakdownLog->loss_time ?? '0 Menit' }}</span>
+                </div>
+            </div>
+
+            <!-- 4. Lama Unit BD -->
+            <div class="p-6">
+                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Lama Unit BD</p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-xl font-black text-indigo-600 truncate" title="{{ $breakdownLog->lama_unit_breakdown ?? 'Berlangsung' }}">{{ $breakdownLog->lama_unit_breakdown ?? 'Berlangsung' }}</span>
+                </div>
+            </div>
+
+            <!-- 5. Daily Impact -->
+            <div class="p-6">
+                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Daily Impact</p>
+                <div class="flex items-baseline gap-1 text-blue-600">
+                    <span class="text-xl font-black">{{ $breakdownLog->loss_time_percentage ?? '0' }}</span>
+                    <span class="text-[10px] font-bold uppercase">%</span>
+                </div>
+            </div>
+
+            <!-- 6. Pelapor -->
             <div class="p-6">
                 <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Pelapor</p>
                 <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600 uppercase">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600 uppercase shrink-0">
                         {{ substr($breakdownLog->reporter->name ?? 'S', 0, 1) }}
                     </div>
-                    <span class="text-sm font-bold text-neutral-700">{{ $breakdownLog->reporter->name ?? 'System' }}</span>
+                    <span class="text-sm font-bold text-neutral-700 truncate" title="{{ $breakdownLog->reporter->name ?? 'System' }}">{{ $breakdownLog->reporter->name ?? 'System' }}</span>
                 </div>
             </div>
         </div>
@@ -184,20 +208,13 @@
                 </div>
             </div>
 
-            <!-- Additional Stats -->
+            <!-- Additional Guidelines -->
             <div class="bg-blue-600 rounded-2xl p-6 text-white shadow-xl shadow-blue-600/20">
-                <p class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 mb-4">Efisiensi Breakdown</p>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-end border-b border-white/10 pb-3">
-                        <span class="text-xs font-bold opacity-80">{{ $breakdownLog->spare_unit_id ? 'Lama Unit Breakdown' : 'Total Waktu Breakdown' }}</span>
-                        <span class="text-xl font-black">{{ $breakdownLog->lama_bd_tanpa_spare ?? $breakdownLog->loss_time ?? '0 Menit' }}</span>
-                    </div>
-                </div>
-                <div class="mt-6 p-3 bg-white/10 rounded-xl">
-                    <p class="text-[10px] leading-relaxed opacity-80 italic italic">
-                        "Laporan ini dibuat otomatis untuk membantu pemantauan ketersediaan unit di lapangan."
-                    </p>
-                </div>
+                <p class="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 mb-2">Panduan Penggunaan</p>
+                <ul class="text-xs font-medium opacity-80 space-y-2 list-disc list-inside">
+                    <li><b>Total Loss Time</b>: Produksi terpotong (Mulai Breakdown hingga Unit Pengganti Datang atau RFU).</li>
+                    <li><b>Lama Unit BD</b>: Waktu yang diakumulasikan khusus untuk reparasi alat (Mulai Breakdown hingga Selesai / RFU).</li>
+                </ul>
             </div>
         </div>
     </div>

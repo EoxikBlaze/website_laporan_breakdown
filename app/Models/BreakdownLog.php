@@ -132,20 +132,22 @@ class BreakdownLog extends Model
     }
 
     /**
-     * Accessor to calculate lama_bd_tanpa_spare (diff between waktu_awal_bd and waktu_spare_datang).
+     * Accessor to calculate lama_unit_breakdown (diff between waktu_awal_bd and waktu_akhir_bd).
      */
-    protected function lamaBdTanpaSpare(): Attribute
+    protected function lamaUnitBreakdown(): Attribute
     {
         return Attribute::make(
             get: function () {
-                if (!$this->waktu_awal_bd || !$this->waktu_spare_datang) {
+                if (!$this->waktu_awal_bd || !$this->waktu_akhir_bd) {
                     return null;
                 }
 
                 $awal = Carbon::parse($this->waktu_awal_bd);
-                $spare = Carbon::parse($this->waktu_spare_datang);
+                $akhir = Carbon::parse($this->waktu_akhir_bd);
 
-                $diff = $awal->diff($spare);
+                if ($akhir->lessThan($awal)) return '0 Menit';
+
+                $diff = $awal->diff($akhir);
                 $parts = [];
                 if ($diff->d > 0) $parts[] = $diff->d . ' Hari';
                 if ($diff->h > 0) $parts[] = $diff->h . ' Jam';
