@@ -4,11 +4,6 @@
 @section('page-title', 'Edit Laporan Breakdown')
 
 @push('styles')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css" rel="stylesheet" />
-<style>
-    .select2-container--bootstrap4 .select2-selection--single { height: calc(1.5em + .75rem + 2px) !important; }
-</style>
 @endpush
 
 @section('content')
@@ -42,26 +37,36 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Rusak <span class="text-rose-500">*</span></label>
-                                <select name="unit_id" id="unit_id" class="select2 w-full" required>
-                                    @foreach($units as $unit)
-                                        <option value="{{ $unit->id }}" {{ old('unit_id', $breakdownLog->unit_id) == $unit->id ? 'selected' : '' }}>
-                                            {{ $unit->nomor_lambung }} - {{ $unit->jenis_unit }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <div data-react-component="IosSelectPicker" 
+                                     data-props="{{ json_encode([
+                                         'name' => 'unit_id', 
+                                         'id' => 'unit_id',
+                                         'placeholder' => 'Pilih Unit Rusak...',
+                                         'label' => 'Unit Rusak',
+                                         'initialValue' => old('unit_id', $breakdownLog->unit_id),
+                                         'required' => true,
+                                         'options' => $units->map(function($u) { 
+                                             return ['value' => $u->id, 'label' => $u->nomor_lambung . ' - ' . $u->jenis_unit]; 
+                                         })->values()->toArray()
+                                     ]) }}">
+                                </div>
                                 @error('unit_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                             </div>
 
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Pengganti (Opsional)</label>
-                                <select name="spare_unit_id" id="spare_unit_id" class="select2 w-full">
-                                    <option value="">Tidak Menggunakan Unit Pengganti</option>
-                                    @foreach($spareUnits as $spare)
-                                        <option value="{{ $spare->id }}" {{ old('spare_unit_id', $breakdownLog->spare_unit_id) == $spare->id ? 'selected' : '' }}>
-                                            {{ $spare->nomor_lambung }} - {{ $spare->jenis_unit }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <div data-react-component="IosSelectPicker" 
+                                     data-props="{{ json_encode([
+                                         'name' => 'spare_unit_id', 
+                                         'id' => 'spare_unit_id',
+                                         'placeholder' => 'Tidak Menggunakan Unit Pengganti',
+                                         'label' => 'Unit Pengganti',
+                                         'initialValue' => old('spare_unit_id', $breakdownLog->spare_unit_id),
+                                         'options' => $spareUnits->map(function($s) { 
+                                             return ['value' => $s->id, 'label' => $s->nomor_lambung . ' - ' . $s->jenis_unit]; 
+                                         })->values()->toArray()
+                                     ]) }}">
+                                </div>
                                 @error('spare_unit_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
@@ -77,13 +82,18 @@
                         @if(auth()->user()->isSuperAdmin())
                         <div class="space-y-2 border-t border-neutral-100 pt-4">
                             <label for="user_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider italic">Reporter (Superadmin Only)</label>
-                            <select name="user_id" id="user_id" class="select2 w-full">
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('user_id', $breakdownLog->user_id) == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name }} ({{ $user->role }})
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div data-react-component="IosSelectPicker" 
+                                 data-props="{{ json_encode([
+                                     'name' => 'user_id', 
+                                     'id' => 'user_id',
+                                     'placeholder' => 'Pilih Reporter...',
+                                     'label' => 'Ganti Reporter',
+                                     'initialValue' => old('user_id', $breakdownLog->user_id),
+                                     'options' => $users->map(function($usr) { 
+                                         return ['value' => $usr->id, 'label' => $usr->name, 'description' => 'Role: ' . $usr->role]; 
+                                     })->values()->toArray()
+                                 ]) }}">
+                            </div>
                         </div>
                         @endif
                     </div>
@@ -162,13 +172,8 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('.select2').select2({
-            theme: 'bootstrap4',
-            width: '100%'
-        });
 
         // Automatic status closing when finish time is filled
         $(document).on('change', 'input[name="waktu_akhir_bd"]', function() {

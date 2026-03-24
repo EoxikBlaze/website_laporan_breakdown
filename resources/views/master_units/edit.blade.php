@@ -41,26 +41,38 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                     <label for="status_operasional" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Status Operasional <span class="text-rose-500">*</span></label>
-                    <select name="status_operasional" id="status_operasional" 
-                            class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none appearance-none bg-white">
-                        <option value="Ready" {{ old('status_operasional', $masterUnit->status_operasional) == 'Ready' ? 'selected' : '' }}>Ready</option>
-                        <option value="In Use" {{ old('status_operasional', $masterUnit->status_operasional) == 'In Use' ? 'selected' : '' }}>In Use</option>
-                        <option value="Breakdown" {{ old('status_operasional', $masterUnit->status_operasional) == 'Breakdown' ? 'selected' : '' }}>Breakdown</option>
-                    </select>
+                    <div data-react-component="IosSelectPicker" 
+                         data-props="{{ json_encode([
+                             'name' => 'status_operasional', 
+                             'id' => 'status_operasional',
+                             'placeholder' => '-- Pilih Status --',
+                             'label' => 'Status Operasional',
+                             'initialValue' => old('status_operasional', $masterUnit->status_operasional),
+                             'required' => true,
+                             'options' => [
+                                 ['value' => 'Ready', 'label' => 'Ready'],
+                                 ['value' => 'In Use', 'label' => 'In Use'],
+                                 ['value' => 'Breakdown', 'label' => 'Breakdown']
+                             ]
+                         ]) }}">
+                    </div>
                     @error('status_operasional') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 @if(auth()->user()->isSuperAdmin())
                 <div class="space-y-2">
-                    <label for="vendor_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Vendor (Opsional)</label>
-                    <select name="vendor_id" id="vendor_id" class="select2 w-full text-sm">
-                        <option value="">-- Tanpa Vendor --</option>
-                        @foreach($vendors as $vendor)
-                            <option value="{{ $vendor->id }}" {{ (old('vendor_id', $masterUnit->vendor_id) == $vendor->id) ? 'selected' : '' }}>
-                                {{ $vendor->nama_vendor }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <div data-react-component="IosSelectPicker" 
+                         data-props="{{ json_encode([
+                             'name' => 'vendor_id', 
+                             'id' => 'vendor_id',
+                             'placeholder' => '-- Tanpa Vendor --',
+                             'label' => 'Vendor Mitra (Opsional)',
+                             'initialValue' => old('vendor_id', $masterUnit->vendor_id),
+                             'options' => $vendors->map(function($v) { 
+                                 return ['value' => $v->id, 'label' => $v->nama_vendor]; 
+                             })->values()->toArray()
+                         ]) }}">
+                    </div>
                     @error('vendor_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
                 @endif

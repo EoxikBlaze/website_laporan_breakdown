@@ -3,6 +3,7 @@ import './bootstrap';
 
 import { createRoot } from 'react-dom/client';
 import { IosDateTimePicker } from './components/ui/ios-datetime-picker';
+import { IosSelectPicker } from './components/ui/ios-select-picker';
 import { ProjectDataTable } from './components/ui/project-data-table';
 import { PremiumDataTable } from './components/ui/premium-data-table';
 import { MasterUnitTable } from './components/islands/MasterUnitTable';
@@ -31,6 +32,9 @@ const mountIslands = () => {
         switch (componentName) {
             case 'IosDateTimePicker':
                 root.render(<IosDateTimePicker {...(props as any)} />);
+                break;
+            case 'IosSelectPicker':
+                root.render(<IosSelectPicker {...(props as any)} />);
                 break;
             case 'ProjectDataTable':
                 root.render(<ProjectDataTable {...(props as any)} visibleColumns={new Set((props as any)['visibleColumns'] || [])} />);

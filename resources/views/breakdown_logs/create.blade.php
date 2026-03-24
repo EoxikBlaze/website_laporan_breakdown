@@ -4,12 +4,6 @@
 @section('page-title', 'Input Laporan Breakdown Baru')
 
 @push('styles')
-<!-- Select2 CDN -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css" rel="stylesheet" />
-<style>
-    .select2-container--bootstrap4 .select2-selection--single { height: calc(1.5em + .75rem + 2px) !important; }
-</style>
 @endpush
 
 @section('content')
@@ -44,14 +38,19 @@
                             <label for="unit_id" class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
                                 Unit Rusak <span class="text-rose-500">*</span>
                             </label>
-                            <select name="unit_id" id="unit_id" class="select2 w-full h-10 rounded-lg border-neutral-300 bg-white" required>
-                                <option value="">Pilih Unit Rusak...</option>
-                                @foreach($units as $unit)
-                                    <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
-                                        {{ $unit->nomor_lambung }} - {{ $unit->jenis_unit }} ({{ $unit->status_operasional }})
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div data-react-component="IosSelectPicker" 
+                                 data-props="{{ json_encode([
+                                     'name' => 'unit_id', 
+                                     'id' => 'unit_id',
+                                     'placeholder' => 'Pilih Unit Rusak...',
+                                     'label' => 'Unit Rusak',
+                                     'initialValue' => old('unit_id'),
+                                     'required' => true,
+                                     'options' => $units->map(function($u) { 
+                                         return ['value' => $u->id, 'label' => $u->nomor_lambung . ' - ' . $u->jenis_unit, 'description' => 'Status: ' . $u->status_operasional]; 
+                                     })->values()->toArray()
+                                 ]) }}">
+                            </div>
                             @error('unit_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
 
@@ -59,14 +58,18 @@
                             <label class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
                                 Unit Pengganti (Opsional)
                             </label>
-                            <select name="spare_unit_id" id="spare_unit_id" class="select2 w-full h-10 rounded-lg border-neutral-300 bg-white">
-                                <option value="">Tidak Menggunakan Unit Pengganti</option>
-                                @foreach($spareUnits as $spare)
-                                    <option value="{{ $spare->id }}" {{ old('spare_unit_id') == $spare->id ? 'selected' : '' }}>
-                                        {{ $spare->nomor_lambung }} - {{ $spare->jenis_unit }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div data-react-component="IosSelectPicker" 
+                                 data-props="{{ json_encode([
+                                     'name' => 'spare_unit_id', 
+                                     'id' => 'spare_unit_id',
+                                     'placeholder' => 'Tidak Menggunakan Unit Pengganti',
+                                     'label' => 'Unit Pengganti',
+                                     'initialValue' => old('spare_unit_id'),
+                                     'options' => $spareUnits->map(function($s) { 
+                                         return ['value' => $s->id, 'label' => $s->nomor_lambung . ' - ' . $s->jenis_unit]; 
+                                     })->values()->toArray()
+                                 ]) }}">
+                            </div>
                             <div class="flex items-start gap-1.5 mt-1.5 opacity-70">
                                 <i class="fas fa-info-circle text-[10px] text-blue-500 mt-0.5"></i>
                                 <span class="text-[10px] text-neutral-500 leading-tight">Hanya unit dengan status <strong>Ready</strong> yang ditampilkan.</span>
@@ -146,15 +149,8 @@
 @endsection
 
 @push('scripts')
-<!-- Select2 JS CDN -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('.select2').select2({
-            theme: 'bootstrap4',
-            width: '100%'
-        });
-
         // Conditional visibility for spare arrival time
         function toggleSpareTime() {
             if ($('#spare_unit_id').val()) {
