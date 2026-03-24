@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Log;
 class BreakdownLogsImport implements ToCollection, WithStartRow
 {
     public $importedCount = 0;
-    public $updatedCount = 0;
     public $skippedCount = 0;
     public $skippedReasons = [];
 
@@ -86,33 +85,21 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
                 $spareUnitNomor = trim((string)($row[6] ?? '-'));
                 $spareUnitId = null;
                 if ($spareUnitNomor !== '-' && $spareUnitNomor !== '') {
-                    // Magically create the spare unit if it doesn't exist yet, bind to the same vendor
-                    $spareUnit = MasterUnit::firstOrCreate(
-                        ['nomor_lambung' => $spareUnitNomor],
-                        [
-                            'vendor_id' => $vendorId,
-                            'jenis_unit' => 'Auto-Generated (Import Spare)'
-                        ]
-                    );
-                    $spareUnitId = $spareUnit->id;
+                    $spareUnit = MasterUnit::where('nomor_lambung', $spareUnitNomor)->first();
+                    $spareUnitId = $spareUnit ? $spareUnit->id : null;
                 }
 
                 $keterangan = trim((string)($row[3] ?? ''));
 
-                // Intelligent Sync: If logging the same unit at the exact same start time, UPDATE instead of SKIP
+                // Prevent infinite duplications by checking if exact same breakdown already exists
                 $existingLog = BreakdownLog::where('unit_id', $unit->id)
                     ->where('waktu_awal_bd', $waktuAwal)
                     ->first();
                 
                 if ($existingLog) {
-                    $existingLog->update([
-                        'waktu_akhir_bd' => $waktuAkhir,
-                        'spare_unit_id' => $spareUnitId,
-                        'waktu_spare_datang' => $waktuDatang,
-                        'keterangan' => $keterangan,
-                    ]);
-                    $this->updatedCount++;
-                    continue; // Row was successfully synced, move to next
+                    $this->skippedCount++;
+                    $this->skippedReasons[] = "Duplikat data ditemukan: $unitNomor pada $waktuAwalStr";
+                    continue;
                 }
 
                 BreakdownLog::create([
