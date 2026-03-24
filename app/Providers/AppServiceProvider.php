@@ -21,10 +21,13 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        // Full admin access (for menus, CRUD on master data)
-        // Broadened to allow vendor_admin and operator for unit management
-        Gate::define('admin', function (User $user) {
+        // Granular permissions for menus and CRUD
+        Gate::define('manage-units', function (User $user) {
             return in_array($user->role, ['super_admin', 'vendor_admin', 'operator']);
+        });
+
+        Gate::define('manage-vendors', function (User $user) {
+            return $user->role === 'super_admin';
         });
 
         // Only super_admin can download Excel exports

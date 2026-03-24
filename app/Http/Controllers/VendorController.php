@@ -15,7 +15,7 @@ class VendorController extends Controller
      */
     public function index()
     {
-        Gate::authorize('admin');
+        Gate::authorize('manage-vendors');
         $vendors = Vendor::all();
         return view('vendors.index', compact('vendors'));
     }
@@ -25,7 +25,7 @@ class VendorController extends Controller
      */
     public function create()
     {
-        Gate::authorize('admin');
+        Gate::authorize('manage-vendors');
         return view('vendors.create');
     }
 
@@ -45,7 +45,7 @@ class VendorController extends Controller
      */
     public function show(Vendor $vendor)
     {
-        Gate::authorize('admin');
+        Gate::authorize('manage-vendors');
         return view('vendors.show', compact('vendor'));
     }
 
@@ -54,7 +54,7 @@ class VendorController extends Controller
      */
     public function edit(Vendor $vendor)
     {
-        Gate::authorize('admin');
+        Gate::authorize('manage-vendors');
         return view('vendors.edit', compact('vendor'));
     }
 
@@ -74,7 +74,7 @@ class VendorController extends Controller
      */
     public function destroy(Vendor $vendor)
     {
-        Gate::authorize('admin');
+        Gate::authorize('manage-vendors');
         
         if ($vendor->breakdownLogs()->exists()) {
             return back()->with('error', 'Vendor tidak dapat dihapus karena sudah digunakan dalam laporan.');

@@ -30,11 +30,13 @@ interface AppSidebarProps {
     logout: string;
   };
   csrfToken: string;
-  canAdmin: boolean;
+  canManageUnits: boolean;
+  canManageVendors: boolean;
+  canManageUsers: boolean;
   currentRoute: string;
 }
 
-export const AppSidebar = ({ user, routes, csrfToken, canAdmin, currentRoute }: AppSidebarProps) => {
+export const AppSidebar = ({ user, routes, csrfToken, canManageUnits, canManageVendors, canManageUsers, currentRoute }: AppSidebarProps) => {
   const [open, setOpen] = useState(false);
   const [breakdownOpen, setBreakdownOpen] = useState(
     currentRoute.includes('breakdown') || currentRoute.includes('dashboard')
@@ -125,41 +127,49 @@ export const AppSidebar = ({ user, routes, csrfToken, canAdmin, currentRoute }: 
             </div>
 
             {/* ── Admin-only links ── */}
-            {canAdmin && (
+            {(canManageUnits || canManageVendors || canManageUsers) && (
               <>
-                <SidebarLink 
-                  link={{
-                    label: "Data Unit",
-                    href: routes.units,
-                    icon: <Truck className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('master_units') ? "text-primary" : "text-neutral-700")} />,
-                  }} 
-                  className={cn(
-                    "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
-                    currentRoute.includes('master_units') && "bg-primary/10"
-                  )}
-                />
-                <SidebarLink 
-                  link={{
-                    label: "Data Vendor",
-                    href: routes.vendors,
-                    icon: <Building2 className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('vendors') ? "text-primary" : "text-neutral-700")} />,
-                  }} 
-                  className={cn(
-                    "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
-                    currentRoute.includes('vendors') && "bg-primary/10"
-                  )}
-                />
-                <SidebarLink 
-                  link={{
-                    label: "Manajemen User",
-                    href: routes.users,
-                    icon: <Users className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('users') ? "text-primary" : "text-neutral-700")} />,
-                  }} 
-                  className={cn(
-                    "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
-                    currentRoute.includes('/users') && "bg-primary/10"
-                  )}
-                />
+                {canManageUnits && (
+                  <SidebarLink 
+                    link={{
+                      label: "Data Unit",
+                      href: routes.units,
+                      icon: <Truck className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('master_units') ? "text-primary" : "text-neutral-700")} />,
+                    }} 
+                    className={cn(
+                      "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
+                      currentRoute.includes('master_units') && "bg-primary/10"
+                    )}
+                  />
+                )}
+                
+                {canManageVendors && (
+                  <SidebarLink 
+                    link={{
+                      label: "Data Vendor",
+                      href: routes.vendors,
+                      icon: <Building2 className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('vendors') ? "text-primary" : "text-neutral-700")} />,
+                    }} 
+                    className={cn(
+                      "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
+                      currentRoute.includes('vendors') && "bg-primary/10"
+                    )}
+                  />
+                )}
+
+                {canManageUsers && (
+                  <SidebarLink 
+                    link={{
+                      label: "Manajemen User",
+                      href: routes.users,
+                      icon: <Users className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('users') ? "text-primary" : "text-neutral-700")} />,
+                    }} 
+                    className={cn(
+                      "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
+                      currentRoute.includes('/users') && "bg-primary/10"
+                    )}
+                  />
+                )}
               </>
             )}
           </div>

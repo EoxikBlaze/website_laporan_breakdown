@@ -13,7 +13,7 @@ class MasterUnitController extends Controller
      */
     public function index()
     {
-        \Illuminate\Support\Facades\Gate::authorize('admin');
+        \Illuminate\Support\Facades\Gate::authorize('manage-units');
         
         $units = MasterUnit::with('vendor')->get();
         return view('master_units.index', compact('units'));
@@ -24,7 +24,7 @@ class MasterUnitController extends Controller
      */
     public function create()
     {
-        \Illuminate\Support\Facades\Gate::authorize('admin');
+        \Illuminate\Support\Facades\Gate::authorize('manage-units');
         $vendors = Vendor::all();
         return view('master_units.create', compact('vendors'));
     }
@@ -34,7 +34,7 @@ class MasterUnitController extends Controller
      */
     public function store(Request $request)
     {
-        \Illuminate\Support\Facades\Gate::authorize('admin');
+        \Illuminate\Support\Facades\Gate::authorize('manage-units');
         
         $validated = $request->validate([
             'nomor_lambung' => ['required', 'string', 'unique:master_units,nomor_lambung'],
@@ -58,7 +58,7 @@ class MasterUnitController extends Controller
      */
     public function show(MasterUnit $masterUnit)
     {
-        \Illuminate\Support\Facades\Gate::authorize('admin');
+        \Illuminate\Support\Facades\Gate::authorize('manage-units');
         $masterUnit->load('vendor');
         return view('master_units.show', compact('masterUnit'));
     }
@@ -68,7 +68,7 @@ class MasterUnitController extends Controller
      */
     public function edit(MasterUnit $masterUnit)
     {
-        \Illuminate\Support\Facades\Gate::authorize('admin');
+        \Illuminate\Support\Facades\Gate::authorize('manage-units');
         $vendors = Vendor::all();
         return view('master_units.edit', compact('masterUnit', 'vendors'));
     }
@@ -78,7 +78,7 @@ class MasterUnitController extends Controller
      */
     public function update(Request $request, MasterUnit $masterUnit)
     {
-        \Illuminate\Support\Facades\Gate::authorize('admin');
+        \Illuminate\Support\Facades\Gate::authorize('manage-units');
         
         $validated = $request->validate([
             'nomor_lambung' => ['required', 'string', 'unique:master_units,nomor_lambung,' . $masterUnit->id],
@@ -102,7 +102,7 @@ class MasterUnitController extends Controller
      */
     public function destroy(MasterUnit $masterUnit)
     {
-        \Illuminate\Support\Facades\Gate::authorize('admin');
+        \Illuminate\Support\Facades\Gate::authorize('manage-units');
         
         // Prevent deletion if unit has breakdown history
         if ($masterUnit->breakdowns()->exists() || $masterUnit->replacements()->exists()) {

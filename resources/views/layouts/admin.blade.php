@@ -40,9 +40,11 @@
             'users'         => route('users.index'),
             'logout'        => route('logout'),
         ],
-        'csrfToken'    => csrf_token(),
-        'canAdmin'     => Gate::check('admin'),
-        'currentRoute' => request()->url(),
+        'csrfToken'        => csrf_token(),
+        'canManageUnits'   => Gate::check('manage-units'),
+        'canManageVendors' => Gate::check('manage-vendors'),
+        'canManageUsers'   => Gate::check('manage-users'),
+        'currentRoute'     => request()->url(),
     ];
 @endphp
 
