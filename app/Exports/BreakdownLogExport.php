@@ -30,6 +30,19 @@ class BreakdownLogExport implements WithMultipleSheets
             $sheets[] = new VendorBreakdownSheet(null, 'Internal');
         }
 
+        // 3. System Data Backups
+        if (auth()->check()) {
+            if (auth()->user()->can('manage-units')) {
+                $sheets[] = new \App\Exports\Sheets\MasterUnitSheet();
+            }
+            if (auth()->user()->can('manage-users')) {
+                $sheets[] = new \App\Exports\Sheets\UserSheet();
+            }
+            if (auth()->user()->can('manage-vendors')) {
+                $sheets[] = new \App\Exports\Sheets\VendorSheet();
+            }
+        }
+
         return $sheets;
     }
 }
