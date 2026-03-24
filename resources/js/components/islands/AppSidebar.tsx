@@ -29,6 +29,7 @@ interface AppSidebarProps {
     breakdownCreate: string;
     breakdownIndex: string;
     users: string;
+    imports?: string;
     logout: string;
   };
   csrfToken: string;
@@ -199,6 +200,17 @@ export const AppSidebar = ({ user, routes, csrfToken, canManageUnits, canManageV
                           )}>
                           <Users className="h-4 w-4 flex-shrink-0" />
                           Manajemen User
+                        </a>
+                      )}
+
+                      {canManageUsers && routes.imports && (
+                        <a href={routes.imports}
+                          className={cn(
+                            "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-neutral-100",
+                            currentRoute.includes('database_imports') ? "bg-primary/10 text-primary font-medium" : "text-neutral-600"
+                          )}>
+                          <Database className="h-4 w-4 flex-shrink-0" />
+                          Import Database
                         </a>
                       )}
                     </motion.div>

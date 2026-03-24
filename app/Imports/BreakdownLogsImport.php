@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\BreakdownLog;
 use App\Models\MasterUnit;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -35,8 +36,16 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
             // $row[10]: Status (calculated automatically)
             
             $unitNomor = trim((string)($row[2] ?? ''));
-            if (!$unitNomor) {
-                continue; // Skip silently if core ident is empty
+            $vendorName = trim((string)($row[1] ?? ''));
+            
+            if (!$unitNomor || !$vendorName) {
+                continue; // Skip silently if core identifiers are blank
+            }
+
+            // Bind explicitly to Vendor
+            $vendor = Vendor::where('nama_vendor', $vendorName)->first();
+            if (!$vendor) {
+                continue; // Aggressive validation: reject row if vendor is missing/invalid name
             }
 
             // Bind master unit forcefully

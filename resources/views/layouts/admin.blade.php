@@ -98,6 +98,7 @@
             'breakdownCreate' => route('breakdown_logs.create'),
             'breakdownIndex'  => route('breakdown_logs.index'),
             'users'         => route('users.index'),
+            'imports'       => route('database_imports.index'),
             'logout'        => route('logout'),
         ],
         'csrfToken'        => csrf_token(),

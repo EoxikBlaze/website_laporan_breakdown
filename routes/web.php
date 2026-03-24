@@ -12,13 +12,13 @@ use App\Http\Controllers\BreakdownLogController;
 use App\Http\Controllers\MasterUnitController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DatabaseImportController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Breakdown Logs
     Route::get('breakdown_logs/export', [BreakdownLogController::class, 'exportExcel'])->name('breakdown_logs.export');
-    Route::post('breakdown_logs/import', [BreakdownLogController::class, 'importExcel'])->name('breakdown_logs.import');
     Route::resource('breakdown_logs', BreakdownLogController::class);
     
     // Master Units
@@ -27,8 +27,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Vendors
     Route::resource('vendors', VendorController::class);
     
-    // User Management (super_admin only — enforced in controller via Gate)
+    // User Management (super_admin only)
     Route::resource('users', UserController::class);
+    
+    // Universal Database Import (super_admin only)
+    Route::resource('database_imports', DatabaseImportController::class)->only(['index', 'store']);
 });
 
 Route::middleware('auth')->group(function () {
