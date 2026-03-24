@@ -37,36 +37,23 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Rusak <span class="text-rose-500">*</span></label>
-                                <div data-react-component="IosSelectPicker" 
-                                     data-props="{{ json_encode([
-                                         'name' => 'unit_id', 
-                                         'id' => 'unit_id',
-                                         'placeholder' => 'Pilih Unit Rusak...',
-                                         'label' => 'Unit Rusak',
-                                         'initialValue' => old('unit_id', $breakdownLog->unit_id),
-                                         'required' => true,
-                                         'options' => $units->map(function($u) { 
-                                             return ['value' => $u->id, 'label' => $u->nomor_lambung . ' - ' . $u->jenis_unit]; 
-                                         })->values()->toArray()
-                                     ]) }}">
-                                </div>
+                                <select name="unit_id" id="unit_id" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer" required>
+                                    <option value="" disabled {{ old('unit_id', $breakdownLog->unit_id) ? '' : 'selected' }}>Pilih Unit Rusak...</option>
+                                    @foreach($units as $u)
+                                        <option value="{{ $u->id }}" {{ old('unit_id', $breakdownLog->unit_id) == $u->id ? 'selected' : '' }}>{{ $u->nomor_lambung }} - {{ $u->jenis_unit }}</option>
+                                    @endforeach
+                                </select>
                                 @error('unit_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                             </div>
 
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Pengganti (Opsional)</label>
-                                <div data-react-component="IosSelectPicker" 
-                                     data-props="{{ json_encode([
-                                         'name' => 'spare_unit_id', 
-                                         'id' => 'spare_unit_id',
-                                         'placeholder' => 'Tidak Menggunakan Unit Pengganti',
-                                         'label' => 'Unit Pengganti',
-                                         'initialValue' => old('spare_unit_id', $breakdownLog->spare_unit_id),
-                                         'options' => $spareUnits->map(function($s) { 
-                                             return ['value' => $s->id, 'label' => $s->nomor_lambung . ' - ' . $s->jenis_unit]; 
-                                         })->values()->toArray()
-                                     ]) }}">
-                                </div>
+                                <select name="spare_unit_id" id="spare_unit_id" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer">
+                                    <option value="" {{ old('spare_unit_id', $breakdownLog->spare_unit_id) ? '' : 'selected' }}>Tidak Menggunakan Unit Pengganti</option>
+                                    @foreach($spareUnits as $s)
+                                        <option value="{{ $s->id }}" {{ old('spare_unit_id', $breakdownLog->spare_unit_id) == $s->id ? 'selected' : '' }}>{{ $s->nomor_lambung }} - {{ $s->jenis_unit }}</option>
+                                    @endforeach
+                                </select>
                                 @error('spare_unit_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
@@ -82,18 +69,12 @@
                         @if(auth()->user()->isSuperAdmin())
                         <div class="space-y-2 border-t border-neutral-100 pt-4">
                             <label for="user_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider italic">Reporter (Superadmin Only)</label>
-                            <div data-react-component="IosSelectPicker" 
-                                 data-props="{{ json_encode([
-                                     'name' => 'user_id', 
-                                     'id' => 'user_id',
-                                     'placeholder' => 'Pilih Reporter...',
-                                     'label' => 'Ganti Reporter',
-                                     'initialValue' => old('user_id', $breakdownLog->user_id),
-                                     'options' => $users->map(function($usr) { 
-                                         return ['value' => $usr->id, 'label' => $usr->name, 'description' => 'Role: ' . $usr->role]; 
-                                     })->values()->toArray()
-                                 ]) }}">
-                            </div>
+                            <select name="user_id" id="user_id" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer">
+                                <option value="" disabled {{ old('user_id', $breakdownLog->user_id) ? '' : 'selected' }}>Pilih Reporter...</option>
+                                @foreach($users as $usr)
+                                    <option value="{{ $usr->id }}" {{ old('user_id', $breakdownLog->user_id) == $usr->id ? 'selected' : '' }}>{{ $usr->name }} ({{ $usr->role }})</option>
+                                @endforeach
+                            </select>
                         </div>
                         @endif
                     </div>
@@ -190,8 +171,7 @@
         }
 
         function toggleSpareTime() {
-            // Because React mounts asynchronously, use the name attribute to reliably locate the input
-            if ($('input[name="spare_unit_id"]').val()) {
+            if ($('select[name="spare_unit_id"]').val()) {
                 $('#spare-time-container').slideDown();
             } else {
                 $('#spare-time-container').slideUp();
@@ -200,11 +180,11 @@
             }
         }
 
-        // Use event delegation for React-rendered DOM inputs
-        $(document).on('change', 'input[name="spare_unit_id"]', toggleSpareTime);
+        // Use event delegation for DOM inputs
+        $(document).on('change', 'select[name="spare_unit_id"]', toggleSpareTime);
         
-        // Use timeout to wait for React hydration before initial check
-        setTimeout(toggleSpareTime, 300);
+        // Initial check
+        toggleSpareTime();
     });
 </script>
 @endpush

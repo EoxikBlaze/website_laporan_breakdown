@@ -38,19 +38,12 @@
                             <label for="unit_id" class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
                                 Unit Rusak <span class="text-rose-500">*</span>
                             </label>
-                            <div data-react-component="IosSelectPicker" 
-                                 data-props="{{ json_encode([
-                                     'name' => 'unit_id', 
-                                     'id' => 'unit_id',
-                                     'placeholder' => 'Pilih Unit Rusak...',
-                                     'label' => 'Unit Rusak',
-                                     'initialValue' => old('unit_id'),
-                                     'required' => true,
-                                     'options' => $units->map(function($u) { 
-                                         return ['value' => $u->id, 'label' => $u->nomor_lambung . ' - ' . $u->jenis_unit, 'description' => 'Status: ' . $u->status_operasional]; 
-                                     })->values()->toArray()
-                                 ]) }}">
-                            </div>
+                            <select name="unit_id" id="unit_id" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer" required>
+                                <option value="" disabled {{ old('unit_id') ? '' : 'selected' }}>Pilih Unit Rusak...</option>
+                                @foreach($units as $u)
+                                    <option value="{{ $u->id }}" {{ old('unit_id') == $u->id ? 'selected' : '' }}>{{ $u->nomor_lambung }} - {{ $u->jenis_unit }}</option>
+                                @endforeach
+                            </select>
                             @error('unit_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
 
@@ -58,18 +51,12 @@
                             <label class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
                                 Unit Pengganti (Opsional)
                             </label>
-                            <div data-react-component="IosSelectPicker" 
-                                 data-props="{{ json_encode([
-                                     'name' => 'spare_unit_id', 
-                                     'id' => 'spare_unit_id',
-                                     'placeholder' => 'Tidak Menggunakan Unit Pengganti',
-                                     'label' => 'Unit Pengganti',
-                                     'initialValue' => old('spare_unit_id'),
-                                     'options' => $spareUnits->map(function($s) { 
-                                         return ['value' => $s->id, 'label' => $s->nomor_lambung . ' - ' . $s->jenis_unit]; 
-                                     })->values()->toArray()
-                                 ]) }}">
-                            </div>
+                            <select name="spare_unit_id" id="spare_unit_id" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer">
+                                <option value="" {{ old('spare_unit_id') ? '' : 'selected' }}>Tidak Menggunakan Unit Pengganti</option>
+                                @foreach($spareUnits as $s)
+                                    <option value="{{ $s->id }}" {{ old('spare_unit_id') == $s->id ? 'selected' : '' }}>{{ $s->nomor_lambung }} - {{ $s->jenis_unit }}</option>
+                                @endforeach
+                            </select>
                             <div class="flex items-start gap-1.5 mt-1.5 opacity-70">
                                 <i class="fas fa-info-circle text-[10px] text-blue-500 mt-0.5"></i>
                                 <span class="text-[10px] text-neutral-500 leading-tight">Hanya unit dengan status <strong>Ready</strong> yang ditampilkan.</span>
@@ -153,17 +140,17 @@
     $(document).ready(function() {
         // Conditional visibility for spare arrival time
         function toggleSpareTime() {
-            if ($('input[name="spare_unit_id"]').val()) {
+            if ($('select[name="spare_unit_id"]').val()) {
                 $('#spare-time-container').slideDown();
             } else {
                 $('#spare-time-container').slideUp();
             }
         }
 
-        $(document).on('change', 'input[name="spare_unit_id"]', toggleSpareTime);
+        $(document).on('change', 'select[name="spare_unit_id"]', toggleSpareTime);
         
-        // Wait for React hydration
-        setTimeout(toggleSpareTime, 300);
+        // Run on load
+        toggleSpareTime();
 
     });
 </script>

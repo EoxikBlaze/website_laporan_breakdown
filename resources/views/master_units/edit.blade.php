@@ -40,18 +40,12 @@
 
             @if(auth()->user()->isSuperAdmin())
             <div class="space-y-2 mt-6">
-                <div data-react-component="IosSelectPicker" 
-                     data-props="{{ json_encode([
-                         'name' => 'vendor_id', 
-                         'id' => 'vendor_id',
-                         'placeholder' => '-- Tanpa Vendor --',
-                         'label' => 'Vendor Mitra (Opsional)',
-                         'initialValue' => old('vendor_id', $masterUnit->vendor_id),
-                         'options' => $vendors->map(function($v) { 
-                             return ['value' => $v->id, 'label' => $v->nama_vendor]; 
-                         })->values()->toArray()
-                     ]) }}">
-                </div>
+                <select name="vendor_id" id="vendor_id" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer">
+                    <option value="" {{ old('vendor_id', $masterUnit->vendor_id) ? '' : 'selected' }}>-- Tanpa Vendor --</option>
+                    @foreach($vendors as $v)
+                        <option value="{{ $v->id }}" {{ old('vendor_id', $masterUnit->vendor_id) == $v->id ? 'selected' : '' }}>{{ $v->nama_vendor }}</option>
+                    @endforeach
+                </select>
                 @error('vendor_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
             </div>
             @endif

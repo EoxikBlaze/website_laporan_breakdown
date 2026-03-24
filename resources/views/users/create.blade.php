@@ -39,37 +39,22 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                     <label for="role" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Level Akses <span class="text-rose-500">*</span></label>
-                    <div data-react-component="IosSelectPicker" 
-                         data-props="{{ json_encode([
-                             'name' => 'role', 
-                             'id' => 'role',
-                             'placeholder' => '-- Pilih Level Akses --',
-                             'label' => 'Level Akses',
-                             'initialValue' => old('role'),
-                             'required' => true,
-                             'options' => [
-                                 ['value' => 'super_admin', 'label' => 'Super Admin'],
-                                 ['value' => 'operator', 'label' => 'Operator']
-                             ]
-                         ]) }}">
-                    </div>
+                    <select name="role" id="role" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer" required>
+                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>-- Pilih Level Akses --</option>
+                        <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                        <option value="operator" {{ old('role') == 'operator' ? 'selected' : '' }}>Operator</option>
+                    </select>
                     @error('role') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="space-y-2" id="vendor-container" style="display: {{ old('role') === 'operator' ? 'block' : 'none' }}">
                     <label for="vendor_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Pilih Vendor <span class="text-rose-500">*</span></label>
-                    <div data-react-component="IosSelectPicker" 
-                         data-props="{{ json_encode([
-                             'name' => 'vendor_id', 
-                             'id' => 'vendor_id',
-                             'placeholder' => '-- Pilih Vendor --',
-                             'label' => 'Pilih Vendor',
-                             'initialValue' => old('vendor_id'),
-                             'options' => $vendors->map(function($v) { 
-                                 return ['value' => $v->id, 'label' => $v->nama_vendor]; 
-                             })->values()->toArray()
-                         ]) }}">
-                    </div>
+                    <select name="vendor_id" id="vendor_id" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer">
+                        <option value="" {{ old('vendor_id') ? '' : 'selected' }}>-- Pilih Vendor --</option>
+                        @foreach($vendors as $v)
+                            <option value="{{ $v->id }}" {{ old('vendor_id') == $v->id ? 'selected' : '' }}>{{ $v->nama_vendor }}</option>
+                        @endforeach
+                    </select>
                     @error('vendor_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
