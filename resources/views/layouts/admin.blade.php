@@ -48,7 +48,19 @@
     ];
 @endphp
 
-<body class="bg-neutral-50 antialiased">
+<body class="bg-neutral-50 antialiased relative">
+    <!-- Global Loading Overlay -->
+    <div id="global-loader" class="fixed inset-0 z-[9999] bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center transition-all duration-300 opacity-0 pointer-events-none">
+        <div class="relative flex items-center justify-center w-16 h-16">
+            <div class="absolute inset-0 rounded-full border-[4px] border-blue-100"></div>
+            <div class="absolute inset-0 rounded-full border-[4px] border-blue-600 border-t-transparent animate-spin"></div>
+            <div class="h-6 w-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-[10px] shadow-lg z-10 animate-pulse">
+                <i class="fas fa-truck-pickup"></i>
+            </div>
+        </div>
+        <p class="mt-4 text-xs font-bold text-blue-800 tracking-widest uppercase animate-pulse">Memproses Data...</p>
+    </div>
+
     <div class="flex flex-col md:flex-row h-screen w-full overflow-hidden">
 
         {{-- ── React Sidebar Island ─── --}}
@@ -116,6 +128,63 @@
 
     <!-- jQuery (Needed for legacy Select2 components) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Global Loading Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('global-loader');
+            
+            function showLoader() {
+                loader.classList.remove('opacity-0', 'pointer-events-none');
+                loader.classList.add('opacity-100');
+            }
+
+            function hideLoader() {
+                loader.classList.remove('opacity-100');
+                loader.classList.add('opacity-0', 'pointer-events-none');
+                document.querySelectorAll('form button[type="submit"]').forEach(btn => btn.disabled = false);
+            }
+
+            // Show on form submit
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    if (form.checkValidity()) {
+                        showLoader();
+                        // Disable buttons slightly after to allow form to submit
+                        setTimeout(() => {
+                            const btns = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+                            btns.forEach(btn => btn.disabled = true);
+                        }, 50);
+                    }
+                });
+            });
+
+            // Show on regular links
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (!link) return;
+
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+                const isDownload = link.hasAttribute('download');
+                const hasOnClick = link.hasAttribute('onclick');
+                
+                // Allow specific exports or routes to bypass loader if needed
+                if (href && href.includes('/export')) return;
+
+                if (href && !href.startsWith('#') && !href.startsWith('javascript:') && target !== '_blank' && !isDownload && !hasOnClick) {
+                    if (href !== window.location.href) {
+                        showLoader();
+                    }
+                }
+            });
+
+            // Hide if navigating Back/Forward from cache
+            window.addEventListener('pageshow', (e) => {
+                if (e.persisted) hideLoader();
+            });
+        });
+    </script>
 
     @stack('scripts')
 </body>
