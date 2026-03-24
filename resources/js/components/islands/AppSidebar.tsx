@@ -10,7 +10,8 @@ import {
   LogOut,
   Users,
   PlusCircle,
-  Database
+  Database,
+  Menu
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
