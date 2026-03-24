@@ -116,25 +116,12 @@
                             @error('waktu_akhir_bd') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                         </div>
 
-@if(auth()->user()->isAdmin())
                         <div class="space-y-2 border-t border-neutral-100 pt-4">
-                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Status Laporan</label>
-                            <div class="grid grid-cols-2 gap-2">
-                                <label class="cursor-pointer group">
-                                    <input type="radio" name="status" value="Open" {{ old('status', $breakdownLog->status) == 'Open' ? 'checked' : '' }} class="peer hidden">
-                                    <div class="flex items-center justify-center p-2 rounded-xl border border-neutral-200 text-xs font-bold text-neutral-400 group-hover:bg-neutral-50 peer-checked:border-rose-500 peer-checked:bg-rose-50 peer-checked:text-rose-600 transition-all">
-                                        OPEN
-                                    </div>
-                                </label>
-                                <label class="cursor-pointer group">
-                                    <input type="radio" name="status" value="Closed" {{ old('status', $breakdownLog->status) == 'Closed' ? 'checked' : '' }} class="peer hidden">
-                                    <div class="flex items-center justify-center p-2 rounded-xl border border-neutral-200 text-xs font-bold text-neutral-400 group-hover:bg-neutral-50 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-600 transition-all">
-                                        CLOSED
-                                    </div>
-                                </label>
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Status Laporan (Otomatis)</label>
+                            <div id="status-badge-container" class="mt-1">
+                                <!-- Badge rendered automatically by JS -->
                             </div>
                         </div>
-@endif
 
                         <div class="pt-4 flex flex-col gap-2">
                             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-[0.98]">
@@ -156,19 +143,31 @@
 <script>
     $(document).ready(function() {
 
-        // Automatic status closing when finish time is filled
-        $(document).on('change', 'input[name="waktu_akhir_bd"]', function() {
-            if ($(this).val()) {
-                $('input[name="status"][value="Closed"]').prop('checked', true);
+        function updateStatusBadge() {
+            const waktuAkhir = $('input[name="waktu_akhir_bd"]').val();
+            const container = $('#status-badge-container');
+            if (waktuAkhir) {
+                container.html(`
+                    <div class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-sm text-xs font-bold">
+                        <i class="fas fa-check-circle text-sm"></i> CLOSED / Selesai
+                    </div>
+                `);
             } else {
-                $('input[name="status"][value="Open"]').prop('checked', true);
+                container.html(`
+                    <div class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 shadow-sm text-xs font-bold">
+                        <i class="fas fa-exclamation-circle text-sm"></i> OPEN / Sedang Dikerjakan
+                    </div>
+                `);
             }
+        }
+
+        // Automatic status badge updating when finish time is filled
+        $(document).on('change', 'input[name="waktu_akhir_bd"]', function() {
+            updateStatusBadge();
         });
 
-        // Initial check for finish time to set status visually if needed
-        if ($('input[name="waktu_akhir_bd"]').val()) {
-            $('input[name="status"][value="Closed"]').prop('checked', true);
-        }
+        // Initial render for status
+        updateStatusBadge();
 
         function toggleSpareTime() {
             if ($('select[name="spare_unit_id"]').val()) {

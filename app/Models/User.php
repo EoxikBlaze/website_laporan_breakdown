@@ -41,11 +41,6 @@ class User extends Authenticatable
         return in_array($this->role, ['super_admin', 'vendor_admin']);
     }
 
-    public function isOperator(): bool
-    {
-        return $this->role === 'operator';
-    }
-
     protected $hidden = [
         'password',
         'remember_token',

@@ -42,12 +42,12 @@
                     <select name="role" id="role" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer" required>
                         <option value="" disabled {{ old('role') ? '' : 'selected' }}>-- Pilih Level Akses --</option>
                         <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
-                        <option value="operator" {{ old('role') == 'operator' ? 'selected' : '' }}>Operator</option>
+                        <option value="vendor_admin" {{ old('role') == 'vendor_admin' ? 'selected' : '' }}>Admin Vendor</option>
                     </select>
                     @error('role') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <div class="space-y-2" id="vendor-container" style="display: {{ old('role') === 'operator' ? 'block' : 'none' }}">
+                <div class="space-y-2" id="vendor-container" style="display: {{ old('role') === 'vendor_admin' ? 'block' : 'none' }}">
                     <label for="vendor_id" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Pilih Vendor <span class="text-rose-500">*</span></label>
                     <select name="vendor_id" id="vendor_id" class="w-full h-12 px-4 rounded-xl border border-neutral-200 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm outline-none font-medium text-neutral-700 cursor-pointer">
                         <option value="" {{ old('vendor_id') ? '' : 'selected' }}>-- Pilih Vendor --</option>
@@ -96,7 +96,7 @@
 <script>
     document.getElementById('role').addEventListener('change', function() {
         const vendorContainer = document.getElementById('vendor-container');
-        if (this.value === 'operator') {
+        if (this.value === 'vendor_admin') {
             vendorContainer.style.display = 'block';
             document.getElementById('vendor_id').setAttribute('required', 'required');
         } else {

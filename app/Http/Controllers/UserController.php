@@ -32,8 +32,8 @@ class UserController extends Controller
             'name'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
             'password'  => 'required|string|min:8|confirmed',
-            'role'      => ['required', Rule::in(['super_admin', 'operator'])],
-            'vendor_id' => 'required_if:role,operator|nullable|exists:vendors,id',
+            'role'      => ['required', Rule::in(['super_admin', 'vendor_admin'])],
+            'vendor_id' => 'required_if:role,vendor_admin|nullable|exists:vendors,id',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -58,8 +58,8 @@ class UserController extends Controller
         $validated = $request->validate([
             'name'      => 'required|string|max:255',
             'email'     => ['required', 'email', Rule::unique('users')->ignore($user->id)],
-            'role'      => ['required', Rule::in(['super_admin', 'operator'])],
-            'vendor_id' => 'required_if:role,operator|nullable|exists:vendors,id',
+            'role'      => ['required', Rule::in(['super_admin', 'vendor_admin'])],
+            'vendor_id' => 'required_if:role,vendor_admin|nullable|exists:vendors,id',
         ]);
 
         if ($request->filled('password')) {
