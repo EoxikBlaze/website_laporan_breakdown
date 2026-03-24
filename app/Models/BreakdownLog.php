@@ -105,14 +105,21 @@ class BreakdownLog extends Model
     {
         return Attribute::make(
             get: function () {
-                if (!$this->waktu_awal_bd || !$this->waktu_akhir_bd) {
+                if (!$this->waktu_awal_bd) {
                     return null;
                 }
 
                 $awal = Carbon::parse($this->waktu_awal_bd);
-                $akhir = Carbon::parse($this->waktu_akhir_bd);
+                
+                if ($this->spare_unit_id && $this->waktu_spare_datang) {
+                    $akhir = Carbon::parse($this->waktu_spare_datang);
+                } else {
+                    if (!$this->waktu_akhir_bd) return null;
+                    $akhir = Carbon::parse($this->waktu_akhir_bd);
+                }
 
-                // For breakdown logs, we usually only care about hours and minutes
+                if ($akhir->lessThan($awal)) return '0 Menit';
+
                 $diff = $awal->diff($akhir);
                 $parts = [];
                 if ($diff->d > 0) $parts[] = $diff->d . ' Hari';
@@ -156,12 +163,20 @@ class BreakdownLog extends Model
     {
         return Attribute::make(
             get: function () {
-                if (!$this->waktu_awal_bd || !$this->waktu_akhir_bd) {
+                if (!$this->waktu_awal_bd) {
                     return null;
                 }
 
                 $awal = Carbon::parse($this->waktu_awal_bd);
-                $akhir = Carbon::parse($this->waktu_akhir_bd);
+                
+                if ($this->spare_unit_id && $this->waktu_spare_datang) {
+                    $akhir = Carbon::parse($this->waktu_spare_datang);
+                } else {
+                    if (!$this->waktu_akhir_bd) return null;
+                    $akhir = Carbon::parse($this->waktu_akhir_bd);
+                }
+
+                if ($akhir->lessThan($awal)) return '0.00%';
 
                 $totalSeconds = $awal->diffInSeconds($akhir);
                 $secondsInDay = 86400;

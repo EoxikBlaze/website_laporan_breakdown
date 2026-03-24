@@ -53,9 +53,9 @@
                             </div>
 
                             <div class="space-y-2">
-                                <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Pengganti (Spare Unit)</label>
+                                <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Pengganti (Opsional)</label>
                                 <select name="spare_unit_id" id="spare_unit_id" class="select2 w-full">
-                                    <option value="">Tidak Menggunakan Spare</option>
+                                    <option value="">Tidak Menggunakan Unit Pengganti</option>
                                     @foreach($spareUnits as $spare)
                                         <option value="{{ $spare->id }}" {{ old('spare_unit_id', $breakdownLog->spare_unit_id) == $spare->id ? 'selected' : '' }}>
                                             {{ $spare->nomor_lambung }} - {{ $spare->jenis_unit }}
@@ -110,7 +110,7 @@
                         </div>
 
                         <div id="spare-time-container" class="space-y-2" style="display: none;">
-                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Spare Unit Datang</label>
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Unit Pengganti Datang</label>
                             <div data-react-component="IosDateTimePicker" 
                                  data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'id' => 'waktu_spare_datang', 'initialValue' => $breakdownLog->waktu_spare_datang ? \Carbon\Carbon::parse($breakdownLog->waktu_spare_datang)->format('Y-m-d\TH:i') : null]) }}">
                             </div>

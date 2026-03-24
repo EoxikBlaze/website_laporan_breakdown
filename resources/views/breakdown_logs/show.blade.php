@@ -53,10 +53,10 @@
                 </div>
             </div>
             <div class="p-6">
-                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Daily Impact</p>
-                <div class="flex items-baseline gap-1 text-blue-600">
-                    <span class="text-xl font-black">{{ $breakdownLog->loss_time_percentage ?? '0' }}</span>
-                    <span class="text-[10px] font-bold uppercase">%</span>
+                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Mulai Breakdown</p>
+                <div class="flex flex-col gap-0.5">
+                    <span class="text-sm font-bold text-neutral-800">{{ \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('d F Y') }}</span>
+                    <span class="text-xs font-semibold text-rose-500">{{ \Carbon\Carbon::parse($breakdownLog->waktu_awal_bd)->format('H:i') }} WIB</span>
                 </div>
             </div>
             <div class="p-6">
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div>
-                            <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Unit Pengganti / Spare</p>
+                            <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Unit Pengganti</p>
                             <div class="flex items-start gap-3">
                                 <div class="p-2 bg-neutral-50 rounded-lg text-neutral-400">
                                     <i class="fas fa-exchange-alt"></i>
@@ -105,7 +105,7 @@
                                         <p class="text-sm font-bold text-neutral-800">{{ $breakdownLog->spareUnit->nomor_lambung }}</p>
                                         <p class="text-[11px] text-neutral-500 font-medium">{{ $breakdownLog->spareUnit->jenis_unit }}</p>
                                     @else
-                                        <p class="text-sm font-bold text-neutral-400">Tidak Menggunakan Spare</p>
+                                        <p class="text-sm font-bold text-neutral-400">Tidak Menggunakan Unit Pengganti</p>
                                     @endif
                                 </div>
                             </div>
@@ -154,7 +154,7 @@
                                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Spare Datang</p>
+                                    <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Unit Pengganti Datang</p>
                                     @if($breakdownLog->waktu_spare_datang)
                                         <p class="text-sm font-bold text-neutral-700">{{ \Carbon\Carbon::parse($breakdownLog->waktu_spare_datang)->format('d F Y') }}</p>
                                         <p class="text-xs text-blue-500 font-medium mt-0.5">Pukul {{ \Carbon\Carbon::parse($breakdownLog->waktu_spare_datang)->format('H:i') }} WIB</p>
@@ -189,7 +189,7 @@
                 <p class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 mb-4">Efisiensi Breakdown</p>
                 <div class="space-y-4">
                     <div class="flex justify-between items-end border-b border-white/10 pb-3">
-                        <span class="text-xs font-bold opacity-80">{{ $breakdownLog->spare_unit_id ? 'Efisiensi Spare' : 'Tanpa Spare' }}</span>
+                        <span class="text-xs font-bold opacity-80">{{ $breakdownLog->spare_unit_id ? 'Lama Unit Breakdown' : 'Total Waktu Breakdown' }}</span>
                         <span class="text-xl font-black">{{ $breakdownLog->lama_bd_tanpa_spare ?? $breakdownLog->loss_time ?? '0 Menit' }}</span>
                     </div>
                 </div>

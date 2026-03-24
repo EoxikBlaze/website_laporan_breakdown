@@ -63,7 +63,7 @@ export const BreakdownLogTable = ({ logs, canAdmin, routes, csrfToken }: Breakdo
     },
     {
       key: "spare_unit",
-      label: "Unit Spare",
+      label: "Unit Pengganti",
       render: (val) => (
         val ? (
           <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">

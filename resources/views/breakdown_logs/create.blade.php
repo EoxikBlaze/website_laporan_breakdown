@@ -56,11 +56,11 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label for="spare_unit_id" class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
-                                Unit Pengganti (Spare)
+                            <label class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
+                                Unit Pengganti (Opsional)
                             </label>
                             <select name="spare_unit_id" id="spare_unit_id" class="select2 w-full h-10 rounded-lg border-neutral-300 bg-white">
-                                <option value="">Tidak Menggunakan Spare</option>
+                                <option value="">Tidak Menggunakan Unit Pengganti</option>
                                 @foreach($spareUnits as $spare)
                                     <option value="{{ $spare->id }}" {{ old('spare_unit_id') == $spare->id ? 'selected' : '' }}>
                                         {{ $spare->nomor_lambung }} - {{ $spare->jenis_unit }}
@@ -95,8 +95,8 @@
                         </div>
 
                         <div class="space-y-2" id="spare-time-container" style="display: none;">
-                            <label for="waktu_spare_datang" class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
-                                Waktu Spare Datang
+                            <label class="block text-xs font-bold text-neutral-700 uppercase tracking-wide">
+                                Waktu Unit Pengganti Datang
                             </label>
                             <div data-react-component="IosDateTimePicker" 
                                  data-props="{{ json_encode(['name' => 'waktu_spare_datang', 'id' => 'waktu_spare_datang', 'initialValue' => old('waktu_spare_datang')]) }}">
