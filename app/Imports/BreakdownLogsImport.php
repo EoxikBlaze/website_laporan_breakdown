@@ -57,17 +57,15 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
                 continue; // Aggressive validation: reject row if vendor is missing/invalid name
             }
 
-            // Magical Auto-Creation for missing nested units (Requires Vendor to be strictly valid first)
-            $unit = MasterUnit::firstOrCreate(
-                ['nomor_lambung' => $unitNomor],
-                [
-                    'vendor_id' => $vendor->id,
-                    'jenis_unit' => 'Auto-Generated (Import)'
-                ]
-            );
+            // Bind master unit forcefully
+            $unit = MasterUnit::where('nomor_lambung', $unitNomor)->first();
+            if (!$unit) {
+                $this->skippedCount++;
+                $this->skippedReasons[] = "Unit tidak valid: $unitNomor";
+                continue; 
+            }
 
-            // Re-aligned Index Mapping to user's custom layout
-            $waktuAwalStr = trim((string)($row[6] ?? ''));
+            $waktuAwalStr = trim((string)($row[4] ?? ''));
             if (!$waktuAwalStr) {
                 $this->skippedCount++;
                 $this->skippedReasons[] = "Waktu Awal kosong untuk unit: $unitNomor";
@@ -82,21 +80,20 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
                     continue;
                 }
 
-                $waktuAkhirStr = trim((string)($row[7] ?? '-'));
+                $waktuAkhirStr = trim((string)($row[5] ?? '-'));
                 $waktuAkhir = ($waktuAkhirStr !== '-' && $waktuAkhirStr !== '') ? $this->parseDate($waktuAkhirStr) : null;
 
-                $waktuDatangStr = trim((string)($row[9] ?? '-'));
+                $waktuDatangStr = trim((string)($row[7] ?? '-'));
                 $waktuDatang = ($waktuDatangStr !== '-' && $waktuDatangStr !== '') ? $this->parseDate($waktuDatangStr) : null;
 
-                $spareUnitNomor = trim((string)($row[8] ?? '-'));
+                $spareUnitNomor = trim((string)($row[6] ?? '-'));
                 $spareUnitId = null;
                 if ($spareUnitNomor !== '-' && $spareUnitNomor !== '') {
                     $spareUnit = MasterUnit::where('nomor_lambung', $spareUnitNomor)->first();
                     $spareUnitId = $spareUnit ? $spareUnit->id : null;
                 }
 
-                $keterangan = trim((string)($row[5] ?? ''));
-                $statusOverride = trim((string)($row[3] ?? ''));
+                $keterangan = trim((string)($row[3] ?? ''));
 
                 // Prevent infinite duplications by checking if exact same breakdown already exists
                 $existingLog = BreakdownLog::where('unit_id', $unit->id)
@@ -118,7 +115,6 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
                     'spare_unit_id' => $spareUnitId,
                     'waktu_spare_datang' => $waktuDatang,
                     'keterangan' => $keterangan,
-                    'status' => $statusOverride ?: 'Breakdown',
                 ]);
 
                 $this->importedCount++;

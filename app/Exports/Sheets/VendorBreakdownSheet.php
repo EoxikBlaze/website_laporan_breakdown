@@ -45,8 +45,8 @@ class VendorBreakdownSheet implements FromQuery, WithTitle, WithHeadings, WithMa
     public function headings(): array
     {
         return [
-            ['No', 'Unit', 'Status', 'Lama Unit BD', 'Keterangan', 'Waktu Breakdown', '', 'Spare', '', 'Loss Time', ''],
-            ['', '', '', '', '', 'Awal', 'Akhir', 'Unit', 'Jam Datang', 'Interval', '%'],
+            ['No', 'Unit', 'Keterangan', 'Waktu Breakdown', '', 'Spare', '', 'Loss Time', '', 'Status', 'Lama Unit BD'],
+            ['', '', '', 'Awal', 'Akhir', 'Unit', 'Jam Datang', 'Interval', '%', '', ''],
             ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
         ];
     }
@@ -59,15 +59,15 @@ class VendorBreakdownSheet implements FromQuery, WithTitle, WithHeadings, WithMa
         return [
             $this->currentRow++,
             $log->unit->nomor_lambung,
-            $log->status,
-            $log->spare_unit_id ? ($log->lama_unit_breakdown ?? '-') : '-',
             $log->keterangan,
             $awal->format('d M Y H.i'),
             $akhir ? $akhir->format('d M Y H.i') : '-',
             $log->spareUnit->nomor_lambung ?? '-',
             $log->waktu_spare_datang ? Carbon::parse($log->waktu_spare_datang)->format('d M Y H.i') : '-',
             $log->loss_time ?? '-',
-            $log->loss_time_percentage ?? '-'
+            $log->loss_time_percentage ?? '-',
+            $log->status,
+            $log->spare_unit_id ? ($log->lama_unit_breakdown ?? '-') : '-'
         ];
     }
 
@@ -89,12 +89,12 @@ class VendorBreakdownSheet implements FromQuery, WithTitle, WithHeadings, WithMa
                 // Merging cells for header
                 $sheet->mergeCells('A1:A2'); // No
                 $sheet->mergeCells('B1:B2'); // Unit
-                $sheet->mergeCells('C1:C2'); // Status
-                $sheet->mergeCells('D1:D2'); // Lama Unit BD
-                $sheet->mergeCells('E1:E2'); // Keterangan
-                $sheet->mergeCells('F1:G1'); // Waktu Breakdown
-                $sheet->mergeCells('H1:I1'); // Spare
-                $sheet->mergeCells('J1:K1'); // Loss Time
+                $sheet->mergeCells('C1:C2'); // Keterangan
+                $sheet->mergeCells('D1:E1'); // Waktu Breakdown
+                $sheet->mergeCells('F1:G1'); // Spare
+                $sheet->mergeCells('H1:I1'); // Loss Time
+                $sheet->mergeCells('J1:J2'); // Status
+                $sheet->mergeCells('K1:K2'); // Lama Unit BD
 
                 // Styling headers
                 $headerRange = 'A1:K2';
@@ -105,8 +105,8 @@ class VendorBreakdownSheet implements FromQuery, WithTitle, WithHeadings, WithMa
                 $sheet->getStyle('A1:K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF4F81BD');
                 
                 // Specific yellow color for Loss Time column in row 1
-                $sheet->getStyle('J1:K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFFFF00');
-                $sheet->getStyle('J1:K1')->getFont()->getColor()->setARGB('FF000000'); // Black font for yellow background
+                $sheet->getStyle('H1:I1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFFFF00');
+                $sheet->getStyle('H1:I1')->getFont()->getColor()->setARGB('FF000000'); // Black font for yellow background
 
                 // Color for row 3 (Greenish reference numbers)
                 $sheet->getStyle('A3:K3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF92D050');
@@ -116,8 +116,8 @@ class VendorBreakdownSheet implements FromQuery, WithTitle, WithHeadings, WithMa
                 $sheet->getStyle("A1:K$lastRow")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
                 // Set column widths for multiline keterangan
-                $sheet->getColumnDimension('E')->setWidth(50);
-                $sheet->getStyle("E1:E$lastRow")->getAlignment()->setWrapText(true);
+                $sheet->getColumnDimension('C')->setWidth(50);
+                $sheet->getStyle("C1:C$lastRow")->getAlignment()->setWrapText(true);
             },
         ];
     }
