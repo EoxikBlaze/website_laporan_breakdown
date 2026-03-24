@@ -13,7 +13,6 @@ class MasterUnit extends Model
     protected $fillable = [
         'nomor_lambung',
         'jenis_unit',
-        'status_operasional',
         'vendor_id',
     ];
 

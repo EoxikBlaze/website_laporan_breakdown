@@ -10,6 +10,7 @@ import {
   LogOut,
   Users,
   PlusCircle,
+  Database
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -41,8 +42,12 @@ export const AppSidebar = ({ user, routes, csrfToken, canManageUnits, canManageV
   const [breakdownOpen, setBreakdownOpen] = useState(
     currentRoute.includes('breakdown') || currentRoute.includes('dashboard')
   );
+  const [masterOpen, setMasterOpen] = useState(
+    currentRoute.includes('master_units') || currentRoute.includes('vendors') || currentRoute.includes('users')
+  );
 
   const isActiveBreakdown = currentRoute.includes('breakdown') || currentRoute.includes('dashboard');
+  const isActiveMaster = currentRoute.includes('master_units') || currentRoute.includes('vendors') || currentRoute.includes('users');
   
   const [isMobile, setIsMobile] = useState(false);
 
@@ -126,51 +131,79 @@ export const AppSidebar = ({ user, routes, csrfToken, canManageUnits, canManageV
               </AnimatePresence>
             </div>
 
-            {/* ── Admin-only links ── */}
+            {/* ── Data Master Dropdown ── */}
             {(canManageUnits || canManageVendors || canManageUsers) && (
-              <>
-                {canManageUnits && (
-                  <SidebarLink 
-                    link={{
-                      label: "Data Unit",
-                      href: routes.units,
-                      icon: <Truck className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('master_units') ? "text-primary" : "text-neutral-700")} />,
-                    }} 
-                    className={cn(
-                      "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
-                      currentRoute.includes('master_units') && "bg-primary/10"
-                    )}
-                  />
-                )}
-                
-                {canManageVendors && (
-                  <SidebarLink 
-                    link={{
-                      label: "Data Vendor",
-                      href: routes.vendors,
-                      icon: <Building2 className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('vendors') ? "text-primary" : "text-neutral-700")} />,
-                    }} 
-                    className={cn(
-                      "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
-                      currentRoute.includes('vendors') && "bg-primary/10"
-                    )}
-                  />
-                )}
+              <div>
+                <button
+                  onClick={() => setMasterOpen(!masterOpen)}
+                  className={cn(
+                    "flex items-center gap-2 py-3 md:py-2 w-full rounded-lg transition-colors hover:bg-neutral-100",
+                    open ? "justify-start px-3" : "justify-center px-0",
+                    isActiveMaster && "bg-primary/10"
+                  )}
+                >
+                  <Database className={cn("h-5 w-5 flex-shrink-0 transition-colors", isActiveMaster ? "text-primary" : "text-neutral-700")} />
+                  {open && (
+                    <motion.span
+                      animate={{ opacity: 1 }}
+                      initial={{ opacity: 0 }}
+                      className="text-neutral-700 text-sm flex-1 text-left"
+                    >
+                      Data Master
+                    </motion.span>
+                  )}
+                  {open && (
+                    <motion.div animate={{ rotate: masterOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                      <ChevronDown className="h-4 w-4 text-neutral-400" />
+                    </motion.div>
+                  )}
+                </button>
 
-                {canManageUsers && (
-                  <SidebarLink 
-                    link={{
-                      label: "Manajemen User",
-                      href: routes.users,
-                      icon: <Users className={cn("h-5 w-5 flex-shrink-0 transition-colors", currentRoute.includes('users') ? "text-primary" : "text-neutral-700")} />,
-                    }} 
-                    className={cn(
-                      "py-3 md:py-2 rounded-lg transition-colors hover:bg-neutral-100",
-                      currentRoute.includes('/users') && "bg-primary/10"
-                    )}
-                  />
-                )}
-              </>
+                <AnimatePresence initial={false}>
+                  {(masterOpen && open) && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden pl-4 mt-1 flex flex-col gap-1"
+                    >
+                      {canManageUnits && (
+                        <a href={routes.units}
+                          className={cn(
+                            "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-neutral-100",
+                            currentRoute.includes('master_units') ? "bg-primary/10 text-primary font-medium" : "text-neutral-600"
+                          )}>
+                          <Truck className="h-4 w-4 flex-shrink-0" />
+                          Data Unit
+                        </a>
+                      )}
+                      
+                      {canManageVendors && (
+                        <a href={routes.vendors}
+                          className={cn(
+                            "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-neutral-100",
+                            currentRoute.includes('vendors') ? "bg-primary/10 text-primary font-medium" : "text-neutral-600"
+                          )}>
+                          <Building2 className="h-4 w-4 flex-shrink-0" />
+                          Data Vendor
+                        </a>
+                      )}
+
+                      {canManageUsers && (
+                        <a href={routes.users}
+                          className={cn(
+                            "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-neutral-100",
+                            currentRoute.includes('users') ? "bg-primary/10 text-primary font-medium" : "text-neutral-600"
+                          )}>
+                          <Users className="h-4 w-4 flex-shrink-0" />
+                          Manajemen User
+                        </a>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             )}
           </div>
         </div>

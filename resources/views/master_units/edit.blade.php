@@ -38,55 +38,24 @@
                 @error('jenis_unit') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                    <label for="status_operasional" class="text-xs font-bold text-neutral-500 uppercase tracking-wider">Status Operasional <span class="text-rose-500">*</span></label>
-                    <div data-react-component="IosSelectPicker" 
-                         data-props="{{ json_encode([
-                             'name' => 'status_operasional', 
-                             'id' => 'status_operasional',
-                             'placeholder' => '-- Pilih Status --',
-                             'label' => 'Status Operasional',
-                             'initialValue' => old('status_operasional', $masterUnit->status_operasional),
-                             'required' => true,
-                             'options' => [
-                                 ['value' => 'Ready', 'label' => 'Ready'],
-                                 ['value' => 'In Use', 'label' => 'In Use'],
-                                 ['value' => 'Breakdown', 'label' => 'Breakdown']
-                             ]
-                         ]) }}">
-                    </div>
-                    @error('status_operasional') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
+            @if(auth()->user()->isSuperAdmin())
+            <div class="space-y-2 mt-6">
+                <div data-react-component="IosSelectPicker" 
+                     data-props="{{ json_encode([
+                         'name' => 'vendor_id', 
+                         'id' => 'vendor_id',
+                         'placeholder' => '-- Tanpa Vendor --',
+                         'label' => 'Vendor Mitra (Opsional)',
+                         'initialValue' => old('vendor_id', $masterUnit->vendor_id),
+                         'options' => $vendors->map(function($v) { 
+                             return ['value' => $v->id, 'label' => $v->nama_vendor]; 
+                         })->values()->toArray()
+                     ]) }}">
                 </div>
-
-                @if(auth()->user()->isSuperAdmin())
-                <div class="space-y-2">
-                    <div data-react-component="IosSelectPicker" 
-                         data-props="{{ json_encode([
-                             'name' => 'vendor_id', 
-                             'id' => 'vendor_id',
-                             'placeholder' => '-- Tanpa Vendor --',
-                             'label' => 'Vendor Mitra (Opsional)',
-                             'initialValue' => old('vendor_id', $masterUnit->vendor_id),
-                             'options' => $vendors->map(function($v) { 
-                                 return ['value' => $v->id, 'label' => $v->nama_vendor]; 
-                             })->values()->toArray()
-                         ]) }}">
-                    </div>
-                    @error('vendor_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
-                </div>
-                @endif
+                @error('vendor_id') <p class="text-[10px] text-rose-500 font-medium mt-1">{{ $message }}</p> @enderror
             </div>
-
-            @if($masterUnit->status_operasional !== 'Ready')
-                <div class="p-4 bg-blue-50 rounded-xl border border-blue-100 flex gap-3">
-                    <i class="fas fa-info-circle text-blue-600 mt-1"></i>
-                    <div>
-                        <h6 class="text-sm font-bold text-blue-900">Perhatian</h6>
-                        <p class="text-xs text-blue-700 leading-relaxed">Mengubah status secara manual dapat mempengaruhi alur otomatisasi breakdown log. Gunakan dengan bijak.</p>
-                    </div>
-                </div>
             @endif
+
 
             <div class="flex items-center gap-3 pt-4">
                 <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-[0.98]">

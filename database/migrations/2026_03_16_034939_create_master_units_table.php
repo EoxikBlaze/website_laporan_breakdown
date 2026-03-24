@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('nomor_lambung')->unique();
             $table->string('jenis_unit');
-            $table->enum('status_operasional', ['Ready', 'In Use', 'Breakdown'])->default('Ready');
             $table->timestamps();
         });
     }

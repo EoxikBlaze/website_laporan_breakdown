@@ -34,7 +34,7 @@ class BreakdownLogController extends Controller
     public function create()
     {
         $units = MasterUnit::all();
-        $spareUnits = MasterUnit::where('status_operasional', 'Ready')->get();
+        $spareUnits = MasterUnit::all();
         $vendors = Vendor::all();
         
         return view('breakdown_logs.create', compact('units', 'spareUnits', 'vendors'));
@@ -71,9 +71,7 @@ class BreakdownLogController extends Controller
     public function edit(BreakdownLog $breakdownLog)
     {
         $units = MasterUnit::all();
-        $spareUnits = MasterUnit::where('status_operasional', 'Ready')
-            ->orWhere('id', $breakdownLog->spare_unit_id) // Allow keeping current spare unit
-            ->get();
+        $spareUnits = MasterUnit::all();
         $vendors = Vendor::all();
         $users = \App\Models\User::all();
             

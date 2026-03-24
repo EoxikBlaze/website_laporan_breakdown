@@ -8,7 +8,6 @@ interface MasterUnit {
   id: number;
   nomor_lambung: string;
   jenis_unit: string;
-  status_operasional: string;
   vendor?: {
     id: number;
     nama_vendor: string;
@@ -53,34 +52,6 @@ export const MasterUnitTable = ({ units, editRoute, deleteRoute, csrfToken }: Ma
           <span className="text-muted-foreground italic text-xs">Tidak ada vendor</span>
         )
       )
-    },
-    {
-      key: "status_operasional",
-      label: "Status",
-      render: (val) => {
-        if (val === "Ready") {
-          return (
-            <Badge variant="success" className="gap-1 px-2.5 py-0.5 rounded-full">
-              <CheckCircle2 className="h-3 w-3" />
-              Ready
-            </Badge>
-          );
-        }
-        if (val === "In Use") {
-          return (
-            <Badge variant="info" className="gap-1 px-2.5 py-0.5 rounded-full">
-              <PlayCircle className="h-3 w-3" />
-              In Use
-            </Badge>
-          );
-        }
-        return (
-          <Badge variant="destructive" className="gap-1 px-2.5 py-0.5 rounded-full">
-            <AlertTriangle className="h-3 w-3" />
-            Breakdown
-          </Badge>
-        );
-      }
     },
     {
       key: "id",

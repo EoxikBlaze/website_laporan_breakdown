@@ -39,7 +39,6 @@ class MasterUnitController extends Controller
         $validated = $request->validate([
             'nomor_lambung' => ['required', 'string', 'unique:master_units,nomor_lambung'],
             'jenis_unit' => ['required', 'string'],
-            'status_operasional' => ['required', 'in:Ready,In Use,Breakdown'],
             'vendor_id' => ['nullable', 'exists:vendors,id'],
         ]);
 
@@ -83,7 +82,6 @@ class MasterUnitController extends Controller
         $validated = $request->validate([
             'nomor_lambung' => ['required', 'string', 'unique:master_units,nomor_lambung,' . $masterUnit->id],
             'jenis_unit' => ['required', 'string'],
-            'status_operasional' => ['required', 'in:Ready,In Use,Breakdown'],
             'vendor_id' => ['nullable', 'exists:vendors,id'],
         ]);
 
