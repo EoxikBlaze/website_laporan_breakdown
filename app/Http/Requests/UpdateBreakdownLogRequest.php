@@ -26,7 +26,7 @@ class UpdateBreakdownLogRequest extends FormRequest
             'waktu_awal_bd' => ['sometimes', 'required', 'date'],
             'waktu_akhir_bd' => ['nullable', 'date', 'after:waktu_awal_bd'],
             'waktu_spare_datang' => ['nullable', 'date', 'after_or_equal:waktu_awal_bd'],
-            'status' => ['sometimes', 'required', 'in:Open,Closed'],
+            'status' => ['nullable', 'in:Open,Closed'],
             'keterangan' => ['nullable', 'string'],
         ];
     }
