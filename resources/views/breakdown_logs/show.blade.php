@@ -22,7 +22,7 @@
                     <a href="{{ route('breakdown_logs.index') }}" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold backdrop-blur-sm transition-all border border-white/10">
                         <i class="fas fa-arrow-left mr-2"></i> Kembali
                     </a>
-                    @if(auth()->user()->role === 'super_admin' || auth()->user()->id === $breakdownLog->reported_by)
+                    @if(auth()->user()->role === 'super_admin' || auth()->user()->id === $breakdownLog->user_id)
                         <a href="{{ route('breakdown_logs.edit', $breakdownLog->id) }}" class="px-5 py-2.5 bg-blue-500 hover:bg-blue-400 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/20 transition-all border border-blue-400/20">
                             <i class="fas fa-edit mr-2"></i> Edit Laporan
                         </a>
