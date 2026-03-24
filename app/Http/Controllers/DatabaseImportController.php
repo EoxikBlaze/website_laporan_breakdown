@@ -39,8 +39,15 @@ class DatabaseImportController extends Controller
 
             switch ($request->target_table) {
                 case 'breakdowns':
-                    Excel::import(new BreakdownLogsImport, $file);
-                    $successMessage = 'Data Laporan Breakdown berhasil di-import massal. Baris tanpa Vendor/Unit valid telah dilewati secara otomatis untuk mencegah error.';
+                    $import = new BreakdownLogsImport;
+                    Excel::import($import, $file);
+                    
+                    if ($import->importedCount === 0 && $import->skippedCount > 0) {
+                        $reasonDump = implode(", ", array_unique(array_slice($import->skippedReasons, 0, 3)));
+                        return back()->with('error', "Import dibatalkan otomatis. {$import->skippedCount} baris terdeteksi cacat/duplikat dan dilewati. Alasan: " . $reasonDump);
+                    }
+
+                    $successMessage = "Berhasil masuk: {$import->importedCount} laporan baru. Dilewati: {$import->skippedCount} baris (Duplikat/Invalid).";
                     break;
                 case 'units':
                     Excel::import(new MasterUnitsImport, $file);

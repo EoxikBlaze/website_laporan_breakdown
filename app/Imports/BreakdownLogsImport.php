@@ -9,9 +9,14 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use Illuminate\Support\Facades\Log;
 
 class BreakdownLogsImport implements ToCollection, WithStartRow
 {
+    public $importedCount = 0;
+    public $skippedCount = 0;
+    public $skippedReasons = [];
+
     /**
      * Start reading from row 4 to skip the heavily styled multi-layer heading array.
      */
@@ -39,29 +44,41 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
             $vendorName = trim((string)($row[1] ?? ''));
             
             if (!$unitNomor || !$vendorName) {
+                $this->skippedCount++;
+                $this->skippedReasons[] = "Baris Kosong / Tanpa Unit & Vendor";
                 continue; // Skip silently if core identifiers are blank
             }
 
             // Bind explicitly to Vendor
             $vendor = Vendor::where('nama_vendor', $vendorName)->first();
             if (!$vendor) {
+                $this->skippedCount++;
+                $this->skippedReasons[] = "Vendor tidak valid: $vendorName";
                 continue; // Aggressive validation: reject row if vendor is missing/invalid name
             }
 
             // Bind master unit forcefully
             $unit = MasterUnit::where('nomor_lambung', $unitNomor)->first();
             if (!$unit) {
+                $this->skippedCount++;
+                $this->skippedReasons[] = "Unit tidak valid: $unitNomor";
                 continue; 
             }
 
             $waktuAwalStr = trim((string)($row[4] ?? ''));
             if (!$waktuAwalStr) {
+                $this->skippedCount++;
+                $this->skippedReasons[] = "Waktu Awal kosong untuk unit: $unitNomor";
                 continue; 
             }
 
             try {
                 $waktuAwal = $this->parseDate($waktuAwalStr);
-                if (!$waktuAwal) continue;
+                if (!$waktuAwal) {
+                    $this->skippedCount++;
+                    $this->skippedReasons[] = "Format Waktu Awal gagal di-parsing: $waktuAwalStr";
+                    continue;
+                }
 
                 $waktuAkhirStr = trim((string)($row[5] ?? '-'));
                 $waktuAkhir = ($waktuAkhirStr !== '-' && $waktuAkhirStr !== '') ? $this->parseDate($waktuAkhirStr) : null;
@@ -78,9 +95,20 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
 
                 $keterangan = trim((string)($row[3] ?? ''));
 
+                // Prevent infinite duplications by checking if exact same breakdown already exists
+                $existingLog = BreakdownLog::where('unit_id', $unit->id)
+                    ->where('waktu_awal_bd', $waktuAwal)
+                    ->first();
+                
+                if ($existingLog) {
+                    $this->skippedCount++;
+                    $this->skippedReasons[] = "Duplikat data ditemukan: $unitNomor pada $waktuAwalStr";
+                    continue;
+                }
+
                 BreakdownLog::create([
                     'unit_id' => $unit->id,
-                    'vendor_id' => $unit->vendor_id, 
+                    'vendor_id' => $vendor->id, 
                     'user_id' => auth()->id() ?? 1,
                     'waktu_awal_bd' => $waktuAwal,
                     'waktu_akhir_bd' => $waktuAkhir,
@@ -89,8 +117,12 @@ class BreakdownLogsImport implements ToCollection, WithStartRow
                     'keterangan' => $keterangan,
                 ]);
 
+                $this->importedCount++;
+
             } catch (\Exception $e) {
-                // Trap formatting chaos and glide over to the next row robustly
+                $this->skippedCount++;
+                $this->skippedReasons[] = "System Exception: " . $e->getMessage();
+                Log::error("Excel Import Crash on Row: " . $e->getMessage() . " Data: " . json_encode($row));
                 continue;
             }
         }
