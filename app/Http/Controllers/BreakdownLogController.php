@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BreakdownLogExport;
+use App\Imports\BreakdownLogsImport;
 
 use Illuminate\Support\Facades\Gate;
 
@@ -109,5 +110,29 @@ class BreakdownLogController extends Controller
     {
         Gate::authorize('can-download');
         return Excel::download(new BreakdownLogExport, 'Laporan_Breakdown_Unit_' . date('Y-m-d') . '.xlsx');
+    }
+
+    /**
+     * Import the breakdown logs from Excel.
+     */
+    public function importExcel(Request $request)
+    {
+        // Enforce Super Admin only explicitly as requested
+        if (!auth()->user()->isSuperAdmin()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls,csv|max:10240'
+        ]);
+
+        try {
+            Excel::import(new BreakdownLogsImport, $request->file('excel_file'));
+            return redirect()->route('breakdown_logs.index')
+                ->with('success', 'File Excel berhasil di-import. Baris yang tidak sesuai unitnya dilewati otomatis.');
+        } catch (\Exception $e) {
+            return redirect()->route('breakdown_logs.index')
+                ->with('error', 'Gagal memproses import. Pastikan file murni hasil modifikasi format tab "Semua Data". Error: ' . $e->getMessage());
+        }
     }
 }

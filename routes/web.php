@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Breakdown Logs
     Route::get('breakdown_logs/export', [BreakdownLogController::class, 'exportExcel'])->name('breakdown_logs.export');
+    Route::post('breakdown_logs/import', [BreakdownLogController::class, 'importExcel'])->name('breakdown_logs.import');
     Route::resource('breakdown_logs', BreakdownLogController::class);
     
     // Master Units
