@@ -25,6 +25,15 @@ class BreakdownLog extends Model
     ];
 
     /**
+     * Automatically append these custom accessors to the model's JSON form.
+     */
+    protected $appends = [
+        'loss_time',
+        'lama_unit_breakdown',
+        'loss_time_percentage'
+    ];
+
+    /**
      * The "booted" method of the model.
      */
     protected static function booted(): void
