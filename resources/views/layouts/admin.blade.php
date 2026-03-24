@@ -12,10 +12,70 @@
 
     <!-- Font Awesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; }
+        
+        /* Select2 Tailwind Override */
+        .select2-container--default .select2-selection--single {
+            height: 3rem !important; /* h-12 */
+            border-radius: 0.75rem !important; /* xl */
+            border: 1px solid #e5e7eb !important; /* neutral-200 */
+            background-color: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        .select2-container--default.select2-container--open .select2-selection--single,
+        .select2-container--default .select2-selection--single:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+            outline: none !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #374151 !important;
+            font-weight: 500 !important;
+            font-size: 0.875rem !important;
+            padding-left: 1rem !important;
+            padding-right: 2.5rem !important;
+            line-height: normal !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100% !important;
+            right: 0.5rem !important;
+        }
+        .select2-dropdown {
+            border: 1px solid #e5e7eb !important;
+            border-radius: 0.75rem !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+            background-color: #ffffff !important;
+            margin-top: 4px !important;
+            overflow: hidden !important;
+            z-index: 1050 !important;
+        }
+        .select2-search--dropdown .select2-search__field {
+            border: 1px solid #e5e7eb !important;
+            border-radius: 0.5rem !important;
+            padding: 0.5rem 0.75rem !important;
+            outline: none !important;
+        }
+        .select2-search--dropdown .select2-search__field:focus {
+            border-color: #3b82f6 !important;
+        }
+        .select2-results__option {
+            padding: 0.5rem 1rem !important;
+            font-size: 0.875rem !important;
+        }
+        .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #eff6ff !important;
+            color: #1d4ed8 !important;
+        }
+        .select2-container--default .select2-results__option--selected {
+            background-color: #f3f4f6 !important;
+        }
     </style>
 
     @stack('styles')
@@ -126,10 +186,11 @@
         </div>
     </div>
 
-    <!-- jQuery (Needed for legacy Select2 components) -->
+    <!-- jQuery & Select2 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <!-- Global Loading Script -->
+    <!-- Global Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const loader = document.getElementById('global-loader');
@@ -187,6 +248,17 @@
             // Hide if navigating Back/Forward from cache
             window.addEventListener('pageshow', (e) => {
                 if (e.persisted) hideLoader();
+            });
+
+            // Initialize Select2 natively on all standard selects
+            $('select').select2({
+                width: '100%',
+                minimumResultsForSearch: 3 // Only show search box if there are more than 3 options
+            });
+            
+            // Re-trigger Select2 change events for specific component logic
+            $('select').on('change', function() {
+                $(this).trigger('input');
             });
         });
     </script>
