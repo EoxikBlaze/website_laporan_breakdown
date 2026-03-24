@@ -60,12 +60,24 @@ export const AppSidebar = ({ user, routes, csrfToken, canManageUnits, canManageV
 
   return (
     <Sidebar open={open} setOpen={setOpen}>
+      {/* Mobile Header Toggle */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-neutral-200">
+        <div className="flex items-center gap-3">
+          <div className="bg-gradient-to-br from-blue-600 to-blue-800 w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20 flex-shrink-0 text-sm">
+            GS
+          </div>
+          <span className="font-bold text-neutral-800 text-sm">PT. PAMA SITE ARIA</span>
+        </div>
+        <button onClick={() => setOpen(!open)} className="p-2 text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors">
+          <Menu className="w-6 h-6" />
+        </button>
+      </div>
       <SidebarBody className="justify-between gap-10 border-r border-neutral-200">
         <div className={cn("flex flex-col flex-1 overflow-y-auto overflow-x-hidden", !open && "items-center")}>
           {open ? <Logo /> : <LogoIcon />}
-          
+
           <div className="mt-8 flex flex-col gap-1">
-            
+
             {/* ── Breakdown Dropdown ── */}
             <div>
               <button

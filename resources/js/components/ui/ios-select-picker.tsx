@@ -103,6 +103,7 @@ export function IosSelectPicker({
             <div className="flex-1 overflow-y-auto max-h-[400px] p-2 space-y-1">
                 {!required && (
                     <button
+                        type="button"
                         onClick={() => handleSelect("")}
                         className={cn(
                             "w-full text-left px-4 py-3 rounded-xl text-sm transition-all flex items-center justify-between group",
@@ -125,6 +126,7 @@ export function IosSelectPicker({
                         const isSelected = String(opt.value) === String(value);
                         return (
                             <button
+                                type="button"
                                 key={opt.value}
                                 onClick={() => handleSelect(opt.value)}
                                 className={cn(

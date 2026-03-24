@@ -45,9 +45,9 @@ class VendorBreakdownSheet implements FromQuery, WithTitle, WithHeadings, WithMa
     public function headings(): array
     {
         return [
-            ['No', 'Unit', 'Keterangan', 'Waktu Breakdown', '', 'Spare', '', 'Loss Time', '', 'Status'],
-            ['', '', '', 'Awal', 'Akhir', 'Unit', 'Jam Datang', 'Interval', '%', ''],
-            ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+            ['No', 'Unit', 'Keterangan', 'Waktu Breakdown', '', 'Spare', '', 'Loss Time', '', 'Status', 'Lama Unit BD'],
+            ['', '', '', 'Awal', 'Akhir', 'Unit', 'Jam Datang', 'Interval', '%', '', ''],
+            ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
         ];
     }
 
@@ -66,7 +66,8 @@ class VendorBreakdownSheet implements FromQuery, WithTitle, WithHeadings, WithMa
             $log->waktu_spare_datang ? Carbon::parse($log->waktu_spare_datang)->format('d M Y H.i') : '-',
             $log->loss_time ?? '-',
             $log->loss_time_percentage ?? '-',
-            $log->status
+            $log->status,
+            $log->spare_unit_id ? ($log->lama_unit_breakdown ?? '-') : '-'
         ];
     }
 
@@ -93,25 +94,26 @@ class VendorBreakdownSheet implements FromQuery, WithTitle, WithHeadings, WithMa
                 $sheet->mergeCells('F1:G1'); // Spare
                 $sheet->mergeCells('H1:I1'); // Loss Time
                 $sheet->mergeCells('J1:J2'); // Status
+                $sheet->mergeCells('K1:K2'); // Lama Unit BD
 
                 // Styling headers
-                $headerRange = 'A1:J2';
+                $headerRange = 'A1:K2';
                 $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle($headerRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
                 
                 // Color for row 1 (Blueish like screenshot)
-                $sheet->getStyle('A1:J1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF4F81BD');
+                $sheet->getStyle('A1:K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF4F81BD');
                 
                 // Specific yellow color for Loss Time column in row 1
                 $sheet->getStyle('H1:I1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFFFF00');
                 $sheet->getStyle('H1:I1')->getFont()->getColor()->setARGB('FF000000'); // Black font for yellow background
 
                 // Color for row 3 (Greenish reference numbers)
-                $sheet->getStyle('A3:J3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF92D050');
+                $sheet->getStyle('A3:K3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF92D050');
                 
                 // Borders for the whole table (example for first 100 rows)
                 $lastRow = $sheet->getHighestRow();
-                $sheet->getStyle("A1:J$lastRow")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+                $sheet->getStyle("A1:K$lastRow")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
                 // Set column widths for multiline keterangan
                 $sheet->getColumnDimension('C')->setWidth(50);
