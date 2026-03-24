@@ -8,6 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     @viteReactRefresh
     @vite(['resources/js/app.tsx'])
+    
+    <!-- PWA / App Meta -->
+    <meta name="theme-color" content="#1e40af">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/icon-192x192.png') }}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -121,6 +131,28 @@
         }
         .btn-login:hover { transform: translateY(-1px); filter: brightness(1.08); }
         .btn-login:active { transform: translateY(0); }
+        
+        /* Password Toggle UI */
+        .pass-group { position: relative; }
+        .pass-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 8px;
+            font-size: 0.9rem;
+            transition: color 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .pass-toggle:hover { color: #3b82f6; }
+
         .footer-note { text-align: center; margin-top: 2rem; font-size: 0.75rem; color: #94a3b8; }
 
         @media (min-width: 768px) {
@@ -185,9 +217,14 @@
 
                 <div class="form-group">
                     <label class="form-label" for="password">Password</label>
-                    <input class="form-input {{ $errors->has('password') ? 'has-error' : '' }}"
-                        type="password" id="password" name="password"
-                        placeholder="••••••••" required>
+                    <div class="pass-group">
+                        <input class="form-input {{ $errors->has('password') ? 'has-error' : '' }}"
+                            type="password" id="password" name="password"
+                            placeholder="••••••••" required>
+                        <button type="button" id="toggle-password" class="pass-toggle" title="Lihat Password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-between mt-2 mb-6">
@@ -208,5 +245,39 @@
             </p>
         </div>
     </div>
+
+    <script>
+        // Password Visibility Toggle
+        const toggleBtn = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password');
+        
+        if (toggleBtn && passwordInput) {
+            toggleBtn.addEventListener('click', function() {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                
+                // Toggle icon class
+                const icon = this.querySelector('i');
+                if (isPassword) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                    this.title = "Sembunyikan Password";
+                } else {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                    this.title = "Lihat Password";
+                }
+            });
+        }
+
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('PWA SW Registered', reg))
+                    .catch(err => console.log('PWA SW Failure', err));
+            });
+        }
+    </script>
 </body>
 </html>
