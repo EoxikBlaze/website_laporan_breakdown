@@ -50,7 +50,7 @@
 
 <body class="bg-neutral-50 antialiased relative">
     <!-- Global Loading Overlay -->
-    <div id="global-loader" class="fixed inset-0 z-[9999] bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center transition-all duration-300 opacity-0 pointer-events-none">
+    <div id="global-loader" class="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-md flex flex-col items-center justify-center transition-all duration-500 opacity-100">
         <div class="relative flex items-center justify-center w-16 h-16">
             <div class="absolute inset-0 rounded-full border-[4px] border-blue-100"></div>
             <div class="absolute inset-0 rounded-full border-[4px] border-blue-600 border-t-transparent animate-spin"></div>
@@ -144,6 +144,11 @@
                 loader.classList.add('opacity-0', 'pointer-events-none');
                 document.querySelectorAll('form button[type="submit"]').forEach(btn => btn.disabled = false);
             }
+
+            // Hide loader 1 second after DOM loads to allow React islands to hydrate smoothly
+            setTimeout(() => {
+                hideLoader();
+            }, 1000);
 
             // Show on form submit
             document.querySelectorAll('form').forEach(form => {
